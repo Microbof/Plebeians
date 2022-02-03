@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -8,24 +10,41 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JFrame;
 
 import configuration.GameConfiguration;
+import engine.Camera;
+import engine.Mouse;
 
 public class MainGui extends JFrame implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
 	private final static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH, GameConfiguration.WINDOW_HEIGHT);
-
 	
-	/**
-	 * Constructor used to set all gui elements and to create the window
-	 */
+	private GameDisplay gameDisplay;
+	
+	private Camera camera;
+	
+	private Mouse mouse;
+
 	public MainGui() {
 		super("Game");
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
+		Container contentPane = getContentPane();
+		contentPane.setLayout(new BorderLayout());
+		
+		mouse = new Mouse();
+		camera = new Camera(GameConfiguration.WINDOW_WIDTH, GameConfiguration.WINDOW_HEIGHT);
+		
 		MouseControls mouseControls = new MouseControls();
 		MouseMotion mouseMotion = new MouseMotion();
 		
+		gameDisplay = new GameDisplay(camera, mouse);
+		gameDisplay.addMouseListener(mouseControls);
+		gameDisplay.addMouseMotionListener(mouseMotion);
+		gameDisplay.setPreferredSize(preferredSize);
+		contentPane.add(gameDisplay, BorderLayout.CENTER);
+		
+		pack();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		setResizable(false);
@@ -41,6 +60,8 @@ public class MainGui extends JFrame implements Runnable {
 			} catch (InterruptedException e) {
 				System.out.println(e.getMessage());
 			}
+			camera.update();
+			gameDisplay.repaint();
 		}
 	}
 
@@ -94,7 +115,18 @@ public class MainGui extends JFrame implements Runnable {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			// TODO Auto-generated method stub
+			int x = e.getX();
+			int y = e.getY();
+			mouse.setX(x);
+			mouse.setY(y);
+			
+			if(x < camera.getRectX() || x > camera.getRectX() + camera.getRectW() || y < camera.getRectY() || y > camera.getRectY() + camera.getRectH()) {
+				double angle = Math.atan2(y - GameConfiguration.WINDOW_HEIGHT / 2, x - GameConfiguration.WINDOW_WIDTH / 2);
+				camera.move((int)(20 * Math.cos(angle)), (int)(20 * Math.sin(angle)));
+			}
+			else {
+				camera.move(0, 0);
+			}
 			
 		}
 		

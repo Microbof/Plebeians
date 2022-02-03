@@ -9,11 +9,18 @@ public class Map {
 	private int columnCount;
 	
 	
-	public Map(int line, int column, int id, String fileName){
+	public Map(int line, int column){
 		
 		this.lineCount = line;
 		this.columnCount = column;
 		tiles = new Tile[line][column];
+		
+		for (int lineIndex = 0; lineIndex < lineCount; lineIndex++) {
+			for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+				Tile tile = new Tile(lineIndex, columnIndex);
+				tiles[lineIndex][columnIndex] = tile;
+			}
+		}
 		
 	}
 	
