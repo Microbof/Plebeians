@@ -12,6 +12,9 @@ import javax.swing.JFrame;
 import configuration.GameConfiguration;
 import engine.Camera;
 import engine.Mouse;
+import engine.map.Map;
+import engine.process.GameBuilder;
+import engine.process.UnitManager;
 
 public class MainGui extends JFrame implements Runnable {
 
@@ -21,13 +24,21 @@ public class MainGui extends JFrame implements Runnable {
 	
 	private GameDisplay gameDisplay;
 	
+	private Map map;
+	
+	private UnitManager manager;
+	
 	private Camera camera;
 	
 	private Mouse mouse;
 
 	public MainGui() {
 		super("Game");
+		init();
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	}
+	
+	public void init() {
 		
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -38,7 +49,11 @@ public class MainGui extends JFrame implements Runnable {
 		MouseControls mouseControls = new MouseControls();
 		MouseMotion mouseMotion = new MouseMotion();
 		
-		gameDisplay = new GameDisplay(camera, mouse);
+		map = GameBuilder.buildMap();
+		
+		manager = GameBuilder.buildInitUnit(map);
+		
+		gameDisplay = new GameDisplay(map,camera, mouse, manager);
 		gameDisplay.addMouseListener(mouseControls);
 		gameDisplay.addMouseMotionListener(mouseMotion);
 		gameDisplay.setPreferredSize(preferredSize);

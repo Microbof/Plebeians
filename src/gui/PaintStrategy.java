@@ -5,8 +5,11 @@ import java.awt.Graphics;
 
 import configuration.GameConfiguration;
 import engine.Camera;
+import engine.Position;
+import engine.building.City;
 import engine.map.Map;
 import engine.map.Tile;
+import engine.unit.Unit;
 
 public class PaintStrategy {
 
@@ -37,6 +40,37 @@ public class PaintStrategy {
 			}
 		}
 		
+	}
+	
+	public void paint(City city, Graphics graphics) {
+		Position position = city.getPosition();
+		int tileSize = GameConfiguration.TILE_SIZE;
+
+		int y = position.getY();
+		int x = position.getX();
+
+		if (city.getHealth()==0) {
+			graphics.setColor(Color.RED);
+		} else {
+			graphics.setColor(Color.BLUE);
+
+		}
+		graphics.drawLine(x * tileSize + tileSize / 2, y * tileSize, x * tileSize, (y + 1) * tileSize);
+		graphics.drawLine(x * tileSize + tileSize / 2, y * tileSize, (x + 1) * tileSize, (y + 1) * tileSize);
+		graphics.drawLine(x * tileSize + tileSize / 2, y * tileSize, x * tileSize + tileSize / 2, (y + 1) * tileSize);
+
+	}
+	
+	public void paint(Unit unit, Graphics graphics) {
+		Position position = unit.getPosition();
+		int tileSize = GameConfiguration.TILE_SIZE;
+
+		int y = position.getY();
+		int x = position.getX();
+
+		graphics.setColor(Color.BLACK);
+		graphics.fillOval(x * tileSize, y * tileSize, tileSize, tileSize);
+
 	}
 	
 }
