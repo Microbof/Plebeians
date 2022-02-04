@@ -35,10 +35,10 @@ public class MainGui extends JFrame implements Runnable {
 	public MainGui() {
 		super("Game");
 		init();
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
 	
 	public void init() {
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());

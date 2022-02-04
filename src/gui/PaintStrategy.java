@@ -42,34 +42,47 @@ public class PaintStrategy {
 		
 	}
 	
-	public void paint(City city, Graphics graphics) {
+	public void paint(City city, Camera camera, Graphics graphics) {
 		Position position = city.getPosition();
 		int tileSize = GameConfiguration.TILE_SIZE;
+		int width = GameConfiguration.WINDOW_WIDTH;
+		int height = GameConfiguration.WINDOW_HEIGHT;
 
 		int y = position.getY();
 		int x = position.getX();
 
-		if (city.getHealth()==0) {
-			graphics.setColor(Color.RED);
-		} else {
-			graphics.setColor(Color.BLUE);
-
+		if (x * tileSize - camera.getX() + tileSize >= 0) {
+			if (x * tileSize - camera.getX() <= width) {
+				if (y * tileSize - camera.getY() <= height) {
+					if (y * tileSize - camera.getY() + tileSize >= 0) {
+						graphics.setColor(Color.BLUE);
+						graphics.fillRect(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+					}
+				}
+			}
 		}
-		graphics.drawLine(x * tileSize + tileSize / 2, y * tileSize, x * tileSize, (y + 1) * tileSize);
-		graphics.drawLine(x * tileSize + tileSize / 2, y * tileSize, (x + 1) * tileSize, (y + 1) * tileSize);
-		graphics.drawLine(x * tileSize + tileSize / 2, y * tileSize, x * tileSize + tileSize / 2, (y + 1) * tileSize);
 
 	}
 	
-	public void paint(Unit unit, Graphics graphics) {
+	public void paint(Unit unit, Camera camera, Graphics graphics) {
 		Position position = unit.getPosition();
 		int tileSize = GameConfiguration.TILE_SIZE;
+		int width = GameConfiguration.WINDOW_WIDTH;
+		int height = GameConfiguration.WINDOW_HEIGHT;
 
 		int y = position.getY();
 		int x = position.getX();
 
-		graphics.setColor(Color.BLACK);
-		graphics.fillOval(x * tileSize, y * tileSize, tileSize, tileSize);
+		if (x * tileSize - camera.getX() + tileSize >= 0) {
+			if (x * tileSize - camera.getX() <= width) {
+				if (y * tileSize - camera.getY() <= height) {
+					if (y * tileSize - camera.getY() + tileSize >= 0) {
+						graphics.setColor(Color.BLACK);
+						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+					}
+				}
+			}
+		}
 
 	}
 	

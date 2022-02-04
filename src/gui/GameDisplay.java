@@ -42,10 +42,10 @@ public class GameDisplay extends JPanel{
 		Player player = manager.getPlayer();
 		
 		for (City city : player.getCities()) {
-			paintStrategy.paint(city, g);
+			paintStrategy.paint(city, camera, g);
 		}
 		for (Unit unit : player.getUnits()) {
-			paintStrategy.paint(unit, g);
+			paintStrategy.paint(unit, camera, g);
 		}
 	}
 	
