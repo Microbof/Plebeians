@@ -28,15 +28,20 @@ public class PaintStrategy {
 					if (tile.getColumn() * tileSize - camera.getX() <= width) {
 						if (tile.getLine() * tileSize - camera.getY() <= height) {
 							if (tile.getLine() * tileSize - camera.getY() + tileSize >= 0) {
-								graphics.setColor(Color.green);
-								graphics.drawRect(tile.getColumn() * tileSize - camera.getX(), tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+								if (tile.getOwner() != null) {
+									graphics.setColor(tile.getOwner().getColor());
+								} else {
+									graphics.setColor(Color.green);
+								}
+								graphics.drawRect(tile.getColumn() * tileSize - camera.getX(),
+										tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
 							}
 						}
 					}
 				}
 			}
 		}
-		
+
 	}
-	
+
 }
