@@ -13,8 +13,8 @@ public class City extends Building {
 
 	private String name;
 
-	public City(int hp, int hpMax, String description, Position position, String name) {
-		super(hp, hpMax, description, position);
+	public City(int hp, int hpMax, String description, Position position, String name, Player player) {
+		super(hp, hpMax, description, position, player);
 		this.setName(name);
 	}
 

@@ -7,7 +7,7 @@ import engine.Mouse;
 import engine.Player;
 import engine.building.City;
 import engine.map.Map;
-import engine.process.UnitManager;
+import engine.process.EntitiesManager;
 import engine.unit.Unit;
 
 public class GameDisplay extends JPanel{
@@ -16,7 +16,7 @@ public class GameDisplay extends JPanel{
 	
 	private PaintStrategy paintStrategy = new PaintStrategy();
 	
-	private UnitManager manager;
+	private EntitiesManager manager;
 
 	
 	private Map map;
@@ -25,7 +25,7 @@ public class GameDisplay extends JPanel{
 	
 	private Mouse mouse;
 
-	public GameDisplay(Map map, Camera camera, Mouse mouse, UnitManager manager) {
+	public GameDisplay(Map map, Camera camera, Mouse mouse, EntitiesManager manager) {
 		this.map = map;
 		this.camera = camera;
 		this.mouse = mouse;

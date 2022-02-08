@@ -12,12 +12,15 @@ public class Entity {
 	private Position position;
 
 	private boolean selected;
+	
+	private Player player;
 
-	public Entity(int hp, int hpMax, String description, Position position) {
+	public Entity(int hp, int hpMax, String description, Position position, Player player) {
 		this.hp = hp;
 		this.hpMax = hpMax;
 		this.description = description;
 		this.position = position;
+		this.selected = false;
 	}
 
 	public int getHp() {
@@ -58,6 +61,10 @@ public class Entity {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 }

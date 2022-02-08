@@ -14,7 +14,7 @@ import engine.Camera;
 import engine.Mouse;
 import engine.map.Map;
 import engine.process.GameBuilder;
-import engine.process.UnitManager;
+import engine.process.EntitiesManager;
 
 public class MainGui extends JFrame implements Runnable {
 
@@ -26,7 +26,7 @@ public class MainGui extends JFrame implements Runnable {
 	
 	private Map map;
 	
-	private UnitManager manager;
+	private EntitiesManager manager;
 	
 	private Camera camera;
 	
@@ -51,7 +51,9 @@ public class MainGui extends JFrame implements Runnable {
 		
 		map = GameBuilder.buildMap();
 		
-		manager = GameBuilder.buildInitUnit(map);
+		manager = new EntitiesManager(map);
+		
+		GameBuilder.buildInitUnit(map, manager);
 		
 		gameDisplay = new GameDisplay(map,camera, mouse, manager);
 		gameDisplay.addMouseListener(mouseControls);

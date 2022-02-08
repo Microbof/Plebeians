@@ -18,25 +18,22 @@ public class GameBuilder {
 		return map;
 	}
 	
-	public static UnitManager buildInitUnit(Map map) {
-		UnitManager manager = new UnitManager(map);
-		
+	public static void buildInitUnit(Map map, EntitiesManager manager) {
 		initializePlayer(manager);
-		
-		return manager;
+
 	}
 	
-	private static void initializePlayer(UnitManager manager) {
+	private static void initializePlayer(EntitiesManager manager) {
 		Player player = new Player();
 		player.setColor(Color.blue);
 		Position posCity = new Position(10,10);
 		Position posUnit = new Position(9,10);
-		player.getCities().add(new City(100,100,"The player's main city.",posCity,"le Bled"));
+		player.getCities().add(new City(100,100,"The player's main city.",posCity,"le Bled", player));
 		player.getCities().get(0).addInfluence(player, map.getTile(9, 10));
 		player.getCities().get(0).addInfluence(player, map.getTile(11, 10));
 		player.getCities().get(0).addInfluence(player, map.getTile(10, 9));
 		player.getCities().get(0).addInfluence(player, map.getTile(10, 11));
-		player.getUnits().add(new Unit(20,20,"This is a unit.",posUnit));
+		player.getUnits().add(new Unit(20,20,"This is a unit.",posUnit, player));
 		manager.set(player);
 	}
 

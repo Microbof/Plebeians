@@ -3,14 +3,16 @@ package engine.process;
 import engine.Player;
 import engine.map.Map;
 
-public class UnitManager {
-	private Map map;
-	private Player player;
+public class EntitiesManager {
 	
-	public UnitManager(Map map) {
+	private Map map;
+	
+	private Player player;
+
+	public EntitiesManager(Map map) {
 		this.map = map;
 	}
-	
+
 	public void set(Player player) {
 		this.player = player;
 	}
@@ -18,6 +20,5 @@ public class UnitManager {
 	public Player getPlayer() {
 		return player;
 	}
-
 
 }
