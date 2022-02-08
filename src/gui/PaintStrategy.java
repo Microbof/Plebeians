@@ -64,6 +64,10 @@ public class PaintStrategy {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
 						graphics.setColor(city.getPlayer().getColor());
 						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+						if(city.isSelected()) {
+							graphics.setColor(Color.RED);
+							graphics.drawOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+						}
 					}
 				}
 			}
@@ -86,6 +90,10 @@ public class PaintStrategy {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
 						graphics.setColor(Color.BLACK);
 						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+						if(unit.isSelected()) {
+							graphics.setColor(Color.RED);
+							graphics.drawOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+						}
 					}
 				}
 			}
