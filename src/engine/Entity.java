@@ -21,6 +21,7 @@ public class Entity {
 		this.description = description;
 		this.position = position;
 		this.selected = false;
+		this.player = player;
 	}
 
 	public int getHp() {

@@ -62,7 +62,7 @@ public class PaintStrategy {
 			if (x * tileSize - camera.getX() <= width) {
 				if (y * tileSize - camera.getY() <= height) {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
-						graphics.setColor(Color.BLUE);
+						graphics.setColor(city.getPlayer().getColor());
 						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
 					}
 				}

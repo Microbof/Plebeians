@@ -17,7 +17,6 @@ public class GameDisplay extends JPanel{
 	private PaintStrategy paintStrategy = new PaintStrategy();
 	
 	private EntitiesManager manager;
-
 	
 	private Map map;
 	
@@ -39,12 +38,10 @@ public class GameDisplay extends JPanel{
 		}
 		paintStrategy.paint(map, camera, g);
 		
-		Player player = manager.getPlayer();
-		
-		for (City city : player.getCities()) {
+		for (City city : manager.getCities()) {
 			paintStrategy.paint(city, camera, g);
 		}
-		for (Unit unit : player.getUnits()) {
+		for (Unit unit : manager.getUnits()) {
 			paintStrategy.paint(unit, camera, g);
 		}
 	}
