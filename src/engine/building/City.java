@@ -8,6 +8,7 @@ import engine.Position;
 import engine.map.Tile;
 
 public class City extends Building {
+	
 	private List<Tile> zoneInfluence = new ArrayList<Tile>();
 
 	private String name;
