@@ -4,13 +4,20 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 import engine.Camera;
 import engine.Mouse;
+import engine.Player;
+import engine.building.City;
 import engine.map.Map;
+import engine.process.UnitManager;
+import engine.unit.Unit;
 
 public class GameDisplay extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	
-	private PaintStrategy paintStrategy = null;
+	private PaintStrategy paintStrategy = new PaintStrategy();
+	
+	private UnitManager manager;
+
 	
 	private Map map;
 	
@@ -18,10 +25,11 @@ public class GameDisplay extends JPanel{
 	
 	private Mouse mouse;
 
-	public GameDisplay(Camera camera, Mouse mouse) {
-		this.map = new Map(100, 100);
+	public GameDisplay(Map map, Camera camera, Mouse mouse, UnitManager manager) {
+		this.map = map;
 		this.camera = camera;
 		this.mouse = mouse;
+		this.manager = manager;
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -30,6 +38,15 @@ public class GameDisplay extends JPanel{
 			paintStrategy = new PaintStrategy();
 		}
 		paintStrategy.paint(map, camera, g);
+		
+		Player player = manager.getPlayer();
+		
+		for (City city : player.getCities()) {
+			paintStrategy.paint(city, camera, g);
+		}
+		for (Unit unit : player.getUnits()) {
+			paintStrategy.paint(unit, camera, g);
+		}
 	}
 	
 }
