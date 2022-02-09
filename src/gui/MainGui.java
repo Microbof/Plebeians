@@ -144,7 +144,10 @@ public class MainGui extends JFrame implements Runnable {
 			else if (e.getButton() == 3) {
 				if (MouseMotion.isDragged) {
 					MouseMotion.isDragged = false;
-					manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
+					MouseMotion.init = false;
+					if(manager.getSelectedUnit().getPath() != null && !manager.getSelectedUnit().getPath().isEmpty()) {
+						manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
+					}
 				}
 			}
 			
@@ -177,6 +180,7 @@ public class MainGui extends JFrame implements Runnable {
 		private Position removedPath;
 		private Position addedPath;
 		private static Boolean isDragged = false;
+		private static Boolean init = false;
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
@@ -193,8 +197,7 @@ public class MainGui extends JFrame implements Runnable {
 						for (int i = -1; i <= 1; i++) {
 							for (int j = -1; j <= 1; j++) {
 								if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
-									// System.out.println((unit.getPosition().getX() + i) + "," +
-									// (unit.getPosition().getY() + j));
+									 //System.out.println((unit.getPosition().getX() + i) + "," + (unit.getPosition().getY() + j));
 									possibleStartPositions.add(new Position(unit.getPosition().getX() + i, unit.getPosition().getY() + j));
 								}
 							}
@@ -202,6 +205,7 @@ public class MainGui extends JFrame implements Runnable {
 						for (Position p : possibleStartPositions) {
 							if (position.equals(p)) {
 								//System.out.println("init path");
+								init = true;
 								unit.addPath(position);
 							}
 						}
@@ -215,17 +219,17 @@ public class MainGui extends JFrame implements Runnable {
 						}
 					}
 					if (path.size() == 2 && position.equals(path.get(0))) {
-						//System.out.println("remove path");
+						System.out.println("remove path");
 						removedPath = path.get(path.size() - 1);
 						unit.removeLastPath();
 					}
-					if (removedPath != null) {
+					if (removedPath != null && init) {
 						if (!path.get(path.size() - 1).equals(position)) {
 							//System.out.println("add path");
 							unit.addPath(position);
 							addedPath = position;
 						}
-					} else if (!path.get(path.size() - 1).equals(position)) {
+					} else if (init && !path.get(path.size() - 1).equals(position)) {
 						//System.out.println("add path");
 						unit.addPath(position);
 						addedPath = position;
