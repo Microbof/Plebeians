@@ -145,7 +145,7 @@ public class MainGui extends JFrame implements Runnable {
 				if (MouseMotion.isDragged) {
 					MouseMotion.isDragged = false;
 					MouseMotion.init = false;
-					if(manager.getSelectedUnit().getPath() != null && !manager.getSelectedUnit().getPath().isEmpty()) {
+					if(manager.getSelectedUnit() != null && manager.getSelectedUnit().getPath() != null && !manager.getSelectedUnit().getPath().isEmpty()) {
 						manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
 					}
 				}
