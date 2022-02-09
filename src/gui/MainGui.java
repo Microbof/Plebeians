@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import configuration.GameConfiguration;
 import engine.Camera;
@@ -15,7 +18,6 @@ import engine.Mouse;
 import engine.Position;
 import engine.building.City;
 import engine.map.Map;
-import engine.map.Tile;
 import engine.process.GameBuilder;
 import engine.unit.Unit;
 import engine.process.EntitiesManager;
@@ -118,7 +120,7 @@ public class MainGui extends JFrame implements Runnable {
 
 				Boolean entitySelected = false;
 
-				//System.out.println("Tile [" + x + "," + y + "]");
+				// System.out.println("Tile [" + x + "," + y + "]");
 
 				for (Unit unit : manager.getUnits()) {
 					Position pos = unit.getPosition();
@@ -140,13 +142,19 @@ public class MainGui extends JFrame implements Runnable {
 				}
 			}
 			else if (e.getButton() == 3) {
-				int x = (e.getX() + camera.getX()) / GameConfiguration.TILE_SIZE;
-				int y = (e.getY() + camera.getY()) / GameConfiguration.TILE_SIZE;
-				System.out.println("Move Tile [" + x + "," + y + "] " + manager.getSelectedUnit());
-				if(manager.getSelectedUnit() != null) {
-					manager.getSelectedUnit().calculateSpeed(new Position(x, y));
+				if (MouseMotion.isDragged) {
+					MouseMotion.isDragged = false;
+					manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
 				}
 			}
+			
+			/*
+			 * else if (e.getButton() == 3) { int x = (e.getX() + camera.getX()) /
+			 * GameConfiguration.TILE_SIZE; int y = (e.getY() + camera.getY()) /
+			 * GameConfiguration.TILE_SIZE; System.out.println("Move Tile [" + x + "," + y +
+			 * "] " + manager.getSelectedUnit()); if(manager.getSelectedUnit() != null) {
+			 * manager.getSelectedUnit().calculateSpeed(new Position(x, y)); } }
+			 */
 
 		}
 
@@ -166,9 +174,64 @@ public class MainGui extends JFrame implements Runnable {
 
 	private class MouseMotion implements MouseMotionListener {
 
+		private Position removedPath;
+		private Position addedPath;
+		private static Boolean isDragged = false;
+
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if (SwingUtilities.isRightMouseButton(e)) {
+				isDragged = true;
+				int x = (e.getX() + camera.getX()) / GameConfiguration.TILE_SIZE;
+				int y = (e.getY() + camera.getY()) / GameConfiguration.TILE_SIZE;
+				Position position = new Position(x, y);
+				Unit unit = manager.getSelectedUnit();
+				if (unit != null) {
+					List<Position> path = unit.getPath();
+					if (path.isEmpty()) {
+						List<Position> possibleStartPositions = new ArrayList<>();
+						for (int i = -1; i <= 1; i++) {
+							for (int j = -1; j <= 1; j++) {
+								if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
+									// System.out.println((unit.getPosition().getX() + i) + "," +
+									// (unit.getPosition().getY() + j));
+									possibleStartPositions.add(new Position(unit.getPosition().getX() + i, unit.getPosition().getY() + j));
+								}
+							}
+						}
+						for (Position p : possibleStartPositions) {
+							if (position.equals(p)) {
+								//System.out.println("init path");
+								unit.addPath(position);
+							}
+						}
+
+					}
+					if (path.size() > 2) {
+						if (path.get(path.size() - 2).equals(position) && !addedPath.equals(position)) {
+							//System.out.println("remove path");
+							removedPath = path.get(path.size() - 1);
+							unit.removeLastPath();
+						}
+					}
+					if (path.size() == 2 && position.equals(path.get(0))) {
+						//System.out.println("remove path");
+						removedPath = path.get(path.size() - 1);
+						unit.removeLastPath();
+					}
+					if (removedPath != null) {
+						if (!path.get(path.size() - 1).equals(position)) {
+							//System.out.println("add path");
+							unit.addPath(position);
+							addedPath = position;
+						}
+					} else if (!path.get(path.size() - 1).equals(position)) {
+						//System.out.println("add path");
+						unit.addPath(position);
+						addedPath = position;
+					}
+				}
+			}
 
 		}
 

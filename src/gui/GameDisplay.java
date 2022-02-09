@@ -43,6 +43,9 @@ public class GameDisplay extends JPanel{
 		}
 		for (Unit unit : manager.getUnits()) {
 			paintStrategy.paint(unit, camera, g);
+			if(unit.getPath() != null) {
+				paintStrategy.paint(unit.getPath(), camera, g);
+			}
 		}
 	}
 	

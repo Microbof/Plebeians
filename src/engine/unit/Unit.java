@@ -1,5 +1,8 @@
 package engine.unit;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import engine.Entity;
 import engine.Player;
 import engine.Position;
@@ -10,6 +13,7 @@ public class Unit extends Entity {
 
 	private Position destination = null;
 	private Speed speed = new Speed(0, 0);
+	private List<Position> path = new ArrayList<>();
 
 	public Unit(int hp, int hpMax, String description, Position position, Player player) {
 		super(hp, hpMax, description, position, player);
@@ -17,10 +21,15 @@ public class Unit extends Entity {
 
 	public void update(Map map) {
 		if (destination != null) {
-			System.out.println("unit dest = " + destination.getX() + "," + destination.getY());
-			System.out.println("unit pos = " + this.getPosition().getX() + "," + this.getPosition().getY());
+			//System.out.println("unit dest = " + destination.getX() + "," + destination.getY());
+			//System.out.println("unit pos = " + this.getPosition().getX() + "," + this.getPosition().getY());
 			if (this.getPosition().equals(destination)) {
-				destination = null;
+				if (path.isEmpty() == false) {
+					destination = path.get(0);
+					path.remove(0);
+				} else {
+					destination = null;
+				}
 				speed.reset();
 			} else {
 				calculateSpeed(destination);
@@ -31,7 +40,7 @@ public class Unit extends Entity {
 	}
 
 	public void move(float vx, float vy) {
-		System.out.println("unit speed : " + vx + "," + vy);
+		//System.out.println("unit speed : " + vx + "," + vy);
 		speed.setVx(vx);
 		speed.setVy(vy);
 	}
@@ -40,16 +49,16 @@ public class Unit extends Entity {
 		this.setDestination(new Position(p.getX(), p.getY()));
 		Position pos = this.getPosition();
 		float vx, vy;
-		if(pos.getX() < p.getX()) {
+		if (pos.getX() < p.getX()) {
 			vx = 1;
-		}else if(pos.getX() > p.getX()) {
+		} else if (pos.getX() > p.getX()) {
 			vx = -1;
 		} else {
 			vx = 0;
 		}
-		if(pos.getY() < p.getY()) {
+		if (pos.getY() < p.getY()) {
 			vy = 1;
-		}else if(pos.getY() > p.getY()) {
+		} else if (pos.getY() > p.getY()) {
 			vy = -1;
 		} else {
 			vy = 0;
@@ -71,6 +80,18 @@ public class Unit extends Entity {
 
 	public void setSpeed(Speed speed) {
 		this.speed = speed;
+	}
+
+	public List<Position> getPath() {
+		return path;
+	}
+	
+	public void addPath(Position position) {
+		path.add(position);
+	}
+	
+	public void removeLastPath() {
+		path.remove(path.size()-1);
 	}
 
 }
