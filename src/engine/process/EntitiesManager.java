@@ -32,7 +32,7 @@ public class EntitiesManager {
 	public void update() {
 
 		for (Unit unit : units) {
-			// update
+			unit.update(map);
 		}
 
 		for (City city : cities) {

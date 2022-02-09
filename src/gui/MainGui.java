@@ -81,6 +81,7 @@ public class MainGui extends JFrame implements Runnable {
 			} catch (InterruptedException e) {
 				System.out.println(e.getMessage());
 			}
+			manager.update();
 			camera.update();
 			gameDisplay.repaint();
 		}
@@ -137,7 +138,14 @@ public class MainGui extends JFrame implements Runnable {
 						}
 					}
 				}
-
+			}
+			else if (e.getButton() == 3) {
+				int x = (e.getX() + camera.getX()) / GameConfiguration.TILE_SIZE;
+				int y = (e.getY() + camera.getY()) / GameConfiguration.TILE_SIZE;
+				System.out.println("Move Tile [" + x + "," + y + "] " + manager.getSelectedUnit());
+				if(manager.getSelectedUnit() != null) {
+					manager.getSelectedUnit().calculateSpeed(new Position(x, y));
+				}
 			}
 
 		}
