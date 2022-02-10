@@ -11,6 +11,8 @@ import engine.building.City;
 import engine.map.Map;
 import engine.map.Tile;
 import engine.unit.Unit;
+import engine.unit.UnitBuilder;
+import engine.unit.UnitFighter;
 
 public class PaintStrategy {
 
@@ -89,7 +91,13 @@ public class PaintStrategy {
 			if (x * tileSize - camera.getX() <= width) {
 				if (y * tileSize - camera.getY() <= height) {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
-						graphics.setColor(Color.BLACK);
+						if(unit instanceof UnitBuilder) {
+							graphics.setColor(Color.PINK);
+						} else if (unit instanceof UnitFighter) {
+							graphics.setColor(Color.GREEN);
+						} else {
+							graphics.setColor(Color.BLACK);
+						}
 						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
 						if(unit.isSelected()) {
 							graphics.setColor(Color.RED);
