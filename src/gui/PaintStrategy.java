@@ -69,6 +69,10 @@ public class PaintStrategy {
 						graphics.setColor(city.getPlayer().getColor());
 						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
 						if(city.isSelected()) {
+							graphics.setColor(Color.GREEN);
+							graphics.setFont(graphics.getFont().deriveFont(18f));
+							int stringwidth = graphics.getFontMetrics().stringWidth("Builder");
+							graphics.drawString("<"+city.getName()+">", x * tileSize - ((tileSize-stringwidth)/2)  - camera.getX(), y * tileSize + 80 - camera.getY());
 							graphics.setColor(Color.RED);
 							graphics.drawOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
 						}
