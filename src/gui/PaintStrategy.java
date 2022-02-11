@@ -6,6 +6,7 @@ import java.util.List;
 
 import configuration.GameConfiguration;
 import engine.Camera;
+import engine.Entity;
 import engine.Position;
 import engine.building.City;
 import engine.map.Map;
@@ -100,8 +101,18 @@ public class PaintStrategy {
 						}
 						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
 						if(unit.isSelected()) {
+							paintHealthbar(unit, graphics, camera);
 							graphics.setColor(Color.RED);
 							graphics.drawOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+							graphics.setColor(Color.BLACK);
+							graphics.setFont(graphics.getFont().deriveFont(18f));
+							if(unit instanceof UnitBuilder) {
+								int stringwidth = graphics.getFontMetrics().stringWidth("Builder");
+								graphics.drawString("Builder", x * tileSize + ((tileSize-stringwidth)/2)  - camera.getX(), y * tileSize + 80 - camera.getY());
+							} else if (unit instanceof UnitFighter) {
+								int stringwidth = graphics.getFontMetrics().stringWidth("Fighter");
+								graphics.drawString("Fighter", x * tileSize + ((tileSize-stringwidth)/2)  - camera.getX(), y * tileSize + 80 - camera.getY());
+							}
 						}
 					}
 				}
@@ -126,4 +137,25 @@ public class PaintStrategy {
 			}
 		}
 	}
+
+	public void paintHealthbar(Unit unit, Graphics graphics, Camera camera) {
+		int tileSize = GameConfiguration.TILE_SIZE;
+		if(unit.isSelected()) {
+			Position p = unit.getPosition();
+			int widthLife = tileSize - (int)((((float)unit.getHpMax() - (float)unit.getHp()) / (float)unit.getHpMax()) * (float)tileSize);
+			if(p.getY() > 10) {
+				graphics.setColor(Color.red);
+				graphics.fillRect(p.getX()*tileSize - camera.getX(), p.getY()*tileSize - 20 - camera.getY(), tileSize, 10);
+				graphics.setColor(Color.green);
+				graphics.fillRect(p.getX()*tileSize - camera.getX(), p.getY()*tileSize - 20 - camera.getY(), widthLife, 10);
+			}
+			else {
+				graphics.setColor(Color.red);
+				graphics.fillRect(p.getX()*tileSize - camera.getX(), p.getY()*tileSize - 20 - camera.getY(), tileSize, 10);
+				graphics.setColor(Color.green);
+				graphics.fillRect(p.getX()*tileSize - camera.getX(), p.getY()*tileSize - 20 - camera.getY(), widthLife, 10);
+			}
+		}
+	}
+
 }
