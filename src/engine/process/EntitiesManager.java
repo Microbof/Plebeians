@@ -24,6 +24,8 @@ public class EntitiesManager {
 	private Unit selectedUnit = null;
 
 	private City selectedCity = null;
+	
+	private Player currentPlayer;
 
 	public EntitiesManager(Map map) {
 		this.map = map;
@@ -38,6 +40,21 @@ public class EntitiesManager {
 		/*for (City city : cities) {
 			// update
 		}*/
+	}
+	
+	public void nextTurn() {
+		int i = players.indexOf(currentPlayer) + 1;
+		if(i >= players.size()) {
+			currentPlayer = players.get(0);
+		}
+		else {
+			currentPlayer = players.get(i);
+		}
+		for (Unit unit : units) {
+			if(unit.getPlayer() == currentPlayer) {
+				unit.resetAp();
+			}
+		}
 	}
 
 	public List<Player> getPlayers() {
@@ -102,5 +119,13 @@ public class EntitiesManager {
 			selectedCity.setSelected(false);
 			selectedCity = null;
 		}
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 }
