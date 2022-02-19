@@ -1,5 +1,6 @@
 package engine;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,17 +10,13 @@ import engine.map.Tile;
 import engine.unit.Unit;
 
 public class Player {
-	
+
 	private int score;
-	
-	private List<Unit> units = new ArrayList<>();
-	
-	private List<Building> buildings = new ArrayList<>();
-	
-	private List<City> cities = new ArrayList<>();
-	
+
 	// tab influence peut etre plutot dans city ? ou les deux ?
 	private List<Tile> influence = new ArrayList<>();
+
+	private Color color;
 
 	public Player() {
 		score = 0;
@@ -34,24 +31,17 @@ public class Player {
 	}
 
 	// ajouter les fonction add
-	
-	public List<Unit> getUnits() {
-		return units;
-	}
-
-	public List<Building> getBuildings() {
-		return buildings;
-	}
-
-	public List<City> getCities() {
-		return cities;
-	}
 
 	public List<Tile> getInfluence() {
 		return influence;
 	}
-	
-	
-	
-	
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
 }
