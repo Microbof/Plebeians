@@ -35,9 +35,9 @@ public class EntitiesManager {
 			unit.update(map);
 		}
 
-		for (City city : cities) {
+		/*for (City city : cities) {
 			// update
-		}
+		}*/
 	}
 
 	public List<Player> getPlayers() {
