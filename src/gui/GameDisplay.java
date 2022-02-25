@@ -90,6 +90,7 @@ public class GameDisplay extends JPanel{
 		for (Unit unit : manager.getUnits()) {
 			paintStrategy.paint(unit, camera, g);
 			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
+				paintStrategy.paint(manager.getUnits(), manager.getCities(), g);
 				paintStrategy.paint(unit.getPath(), camera, g);
 			}
 		}

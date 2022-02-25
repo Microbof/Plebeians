@@ -85,6 +85,32 @@ public class PaintStrategy {
 
 	}
 	
+	public void paint(List<Unit> units, List<City> cities, Graphics graphics) {
+        int minimapOffset = 10;
+        graphics.setColor(Color.black);
+        graphics.fillRect(minimapOffset,
+                GameConfiguration.WINDOW_HEIGHT - 2 * GameConfiguration.LINE_COUNT - minimapOffset,
+                2 * GameConfiguration.COLUMN_COUNT, 2 * GameConfiguration.LINE_COUNT);
+
+        for (City city : cities) {
+            Position cityPosition = city.getPosition();
+            graphics.setColor(city.getPlayer().getColor());
+            graphics.fillRect(minimapOffset + 2 * cityPosition.getX(), GameConfiguration.WINDOW_HEIGHT
+                    - 2 * GameConfiguration.LINE_COUNT - minimapOffset + 2 * cityPosition.getY(), 2, 2);
+        }
+
+        for (Unit unit : units) {
+            Position unitPosition = unit.getPosition();
+            if (unit.isSelected()) {
+                graphics.setColor(Color.RED);
+            } else {
+                graphics.setColor(unit.getPlayer().getColor());
+            }
+            graphics.fillRect(minimapOffset + 2 * unitPosition.getX(), GameConfiguration.WINDOW_HEIGHT
+                    - 2 * GameConfiguration.LINE_COUNT - minimapOffset + 2 * unitPosition.getY(), 2, 2);
+        }
+    }
+	
 	public void paint(Unit unit, Camera camera, Graphics graphics) {
 		Position position = unit.getPosition();
 		int tileSize = GameConfiguration.TILE_SIZE;
