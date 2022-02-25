@@ -1,5 +1,7 @@
 package configuration;
 
+import java.awt.Color;
+
 public class GameConfiguration {
 	
 	public final static int GAME_SPEED = 1000/30;
@@ -13,5 +15,9 @@ public class GameConfiguration {
 	public final static int LINE_COUNT = 100;
 	
 	public final static int TILE_SIZE = 64;
+	
+	public final static Color PLAYER1COLOR = new Color(0,0,255,80);
+	
+	public final static Color PLAYER2COLOR = new Color(255,0,0,80);
 
 }
