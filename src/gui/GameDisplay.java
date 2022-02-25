@@ -14,6 +14,7 @@ import engine.Mouse;
 import engine.Player;
 import engine.building.City;
 import engine.map.Map;
+import engine.map.Minimap;
 import engine.process.EntitiesManager;
 import engine.unit.Unit;
 
@@ -26,6 +27,8 @@ public class GameDisplay extends JPanel{
 	private EntitiesManager manager;
 	
 	private Map map;
+	
+	private Minimap miniMap;
 	
 	private Camera camera;
 	
@@ -90,7 +93,7 @@ public class GameDisplay extends JPanel{
 		for (Unit unit : manager.getUnits()) {
 			paintStrategy.paint(unit, camera, g);
 			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
-				paintStrategy.paint(manager.getUnits(), manager.getCities(), g);
+				paintStrategy.paint(manager.getUnits(), manager.getCities(), minimap, g);
 				paintStrategy.paint(unit.getPath(), camera, g);
 			}
 		}

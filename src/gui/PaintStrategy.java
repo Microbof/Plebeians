@@ -84,7 +84,15 @@ public class PaintStrategy {
 		}
 
 	}
-	
+	/**
+	 * 
+	 * 
+	 * @param units
+	 * @param cities
+	 * @param graphics
+	 * 
+	 * Paints the minimap on the game screen
+	 */
 	public void paint(List<Unit> units, List<City> cities, Graphics graphics) {
         int minimapOffset = 10;
         graphics.setColor(Color.black);
