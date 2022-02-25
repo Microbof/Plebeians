@@ -35,16 +35,6 @@ public class Tile {
 		this.unit = null;
 	}
 
-	public Tile(int line, int column) {
-		this.line = line;
-		this.column = column;
-		this.solid = false;
-		this.biome = null;
-		this.building = null;
-		this.ressource = null;
-		this.unit = null;
-	}
-
 	public int getLine() {
 		return this.line;
 	}

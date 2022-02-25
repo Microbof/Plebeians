@@ -1,12 +1,7 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.List;
-
 import configuration.GameConfiguration;
 import engine.Camera;
-import engine.Entity;
 import engine.Position;
 import engine.building.City;
 import engine.map.Map;
@@ -14,6 +9,9 @@ import engine.map.Tile;
 import engine.unit.Unit;
 import engine.unit.UnitBuilder;
 import engine.unit.UnitFighter;
+
+import java.awt.*;
+import java.util.List;
 
 public class PaintStrategy {
 
@@ -31,6 +29,33 @@ public class PaintStrategy {
 		for (int lineIndex = 0; lineIndex < map.getLineCount(); lineIndex++) {
 			for (int columnIndex = 0; columnIndex < map.getColumnCount(); columnIndex++) {
 				Tile tile = tiles[lineIndex][columnIndex];
+				switch (tile.getBiome().getId()) {
+					case 0: //plain
+						graphics.setColor(new Color(0, 100, 0));
+						graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
+								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+						break;
+					case 1: //hill
+						graphics.setColor(new Color(0, 150, 0));
+						graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
+								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+						break;
+					case 2: //forest
+						graphics.setColor(Color.GREEN);
+						graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
+								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+						break;
+					case 3: //mountain
+						graphics.setColor(Color.GRAY);
+						graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
+								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+						break;
+					case 4: //sea
+						graphics.setColor(Color.BLUE);
+						graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
+								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+						break;
+				}
 				if (tile.getColumn() * tileSize - camera.getX() + tileSize >= 0) {
 					if (tile.getColumn() * tileSize - camera.getX() <= width) {
 						if (tile.getLine() * tileSize - camera.getY() <= height) {

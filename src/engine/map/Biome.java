@@ -10,11 +10,14 @@ public class Biome {
 	
 	private int id;
 
-	public Biome(int id, String description, int production, int food) {
+	private boolean accessible;
+
+	public Biome(int id, String description, int production, int food, boolean accessible) {
 		this.id = id;
 		this.description = description;
 		this.production = production;
 		this.food = food;
+		this.accessible = accessible;
 	}
 
 	public int getProduction() {
@@ -39,6 +42,10 @@ public class Biome {
 
 	public int getId() {
 		return id;
+	}
+
+	public boolean isAccessible() {
+		return accessible;
 	}
 	
 	
