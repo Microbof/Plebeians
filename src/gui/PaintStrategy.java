@@ -58,6 +58,8 @@ public class PaintStrategy {
 		int tileSize = GameConfiguration.TILE_SIZE;
 		int width = GameConfiguration.WINDOW_WIDTH;
 		int height = GameConfiguration.WINDOW_HEIGHT;
+		Color player1 = GameConfiguration.PLAYER1COLOR;
+		Color player2 = GameConfiguration.PLAYER2COLOR;
 
 		int y = position.getY();
 		int x = position.getX();
@@ -66,10 +68,10 @@ public class PaintStrategy {
 			if (x * tileSize - camera.getX() <= width) {
 				if (y * tileSize - camera.getY() <= height) {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
-						graphics.setColor(city.getPlayer().getColor());
+						graphics.setColor(city.getPlayer().getColor().darker());
 						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
 						if(city.isSelected()) {
-							graphics.setColor(Color.GREEN);
+							graphics.setColor(Color.BLACK);
 							graphics.setFont(graphics.getFont().deriveFont(18f));
 							int stringwidth = graphics.getFontMetrics().stringWidth("Builder");
 							graphics.drawString("<"+city.getName()+">", x * tileSize - ((tileSize-stringwidth)/2)  - camera.getX(), y * tileSize + 80 - camera.getY());
@@ -97,11 +99,17 @@ public class PaintStrategy {
 				if (y * tileSize - camera.getY() <= height) {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
 						if(unit instanceof UnitBuilder) {
-							graphics.setColor(Color.PINK);
+							if(unit.getPlayer().getColor()==GameConfiguration.PLAYER2COLOR) {
+								graphics.setColor(new Color(255,210,210));
+							} else if (unit.getPlayer().getColor()==GameConfiguration.PLAYER1COLOR) {
+								graphics.setColor(new Color(210,210,255));
+							}
 						} else if (unit instanceof UnitFighter) {
-							graphics.setColor(Color.GREEN);
-						} else {
-							graphics.setColor(Color.BLACK);
+							if(unit.getPlayer().getColor()==GameConfiguration.PLAYER2COLOR) {
+								graphics.setColor(new Color(103,50,50));
+							} else if (unit.getPlayer().getColor()==GameConfiguration.PLAYER1COLOR) {
+								graphics.setColor(new Color(100,100,200));
+							}
 						}
 						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
 						if(unit.isSelected()) {
