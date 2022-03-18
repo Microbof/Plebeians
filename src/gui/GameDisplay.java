@@ -152,6 +152,9 @@ public class GameDisplay extends JPanel{
 		c.gridwidth = 2;   //2 columns wide
 		c.gridy = 2;       //third row
 		panel.add(button, c);
+
+		miniMap = new Minimap(map, manager);
+		//panel.add(miniMap);
 		
 		panel.setOpaque(false);
 		
@@ -301,10 +304,10 @@ public class GameDisplay extends JPanel{
 		for (Unit unit : manager.getUnits()) {
 			paintStrategy.paint(unit, camera, g);
 			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
-				paintStrategy.paint(manager.getUnits(), manager.getCities(), g);
 				paintStrategy.paint(unit.getPath(), camera, g);
 			}
 		}
+		miniMap.repaint();
 	}
 	
 }

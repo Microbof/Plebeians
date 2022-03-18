@@ -1,66 +1,28 @@
 package engine.map;
 
-import javax.swing.JPanel;
-
-import configuration.GameConfiguration;
 import engine.process.EntitiesManager;
+import gui.PaintStrategy;
 
-public class Minimap {
+import javax.swing.*;
+import java.awt.*;
 
-	int firstGridXOfMap;
-	private int firstGridYOfMap;
-	private int gridMapWidth;
-	private int gridMapHeight;
-	private final int MINIMAP_OFFSET = 10;
+public class Minimap extends JPanel{
+	private PaintStrategy paintStrategy;
+	private Map map;
+	private EntitiesManager manager;
 
-	private Tile[][] tiles;
-
-	private int lineCount;
-
-	private int columnCount;
-
-	public Minimap(JPanel minimapPanel) {
-
-		int panelWidth = minimapPanel.getWidth();
-		int panelHeight = minimapPanel.getHeight();
-		int panelX = minimapPanel.getX() + panelWidth / 2;
-		int panelY = minimapPanel.getY();
-
-		firstGridXOfMap = panelX + MINIMAP_OFFSET;
-		firstGridYOfMap = panelY + MINIMAP_OFFSET;
-		gridMapWidth = (panelWidth / 2) / GameConfiguration.COLUMN_COUNT;
-		gridMapHeight = panelHeight / GameConfiguration.LINE_COUNT;
-
+	public Minimap(Map map, EntitiesManager manager) {
+		this.map = map;
+		this.manager = manager;
 	}
 
-	public int getFirstGridXOfMap() {
-		return firstGridXOfMap;
-	}
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 
-	public int getFirstGridYOfMap() {
-		return firstGridYOfMap;
-	}
-
-	public int getGridMapWidth() {
-		return gridMapWidth;
-	}
-
-	public int getGridMapHeight() {
-		return gridMapHeight;
-	}
-	public Tile[][] getTiles(){
-		return tiles;
-	}
-	
-	public int getLineCount(){
-		return this.lineCount;
-	}
-	
-	public int getColumnCount(){
-		return this.columnCount;
-	}
-	
-	public Tile getTile(int line, int column){
-		return this.tiles[line][column];
+		if(paintStrategy == null){
+			paintStrategy = new PaintStrategy();
+		}
+		paintStrategy.paint(this, map, manager, g);
 	}
 }
