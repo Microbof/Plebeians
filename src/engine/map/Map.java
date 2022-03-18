@@ -17,11 +17,10 @@ public class Map {
 		
 		for (int lineIndex = 0; lineIndex < lineCount; lineIndex++) {
 			for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
-				Tile tile = new Tile(lineIndex, columnIndex);
+				Tile tile = new Tile(lineIndex, columnIndex, new Plain());
 				tiles[lineIndex][columnIndex] = tile;
 			}
 		}
-		
 	}
 	
 	public Tile[][] getTiles(){
