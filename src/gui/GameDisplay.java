@@ -3,6 +3,8 @@ package gui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
@@ -117,18 +119,41 @@ public class GameDisplay extends JPanel{
 	
 	
 	private JPanel createGamePanel() {
-		GridLayout gridLayout = new GridLayout(4,3);
-		JPanel panel = new JPanel(gridLayout);
+//		GridLayout gridLayout = new GridLayout(4,3);
+//		JPanel panel = new JPanel(gridLayout);
+//		panel.setOpaque(false);
+//		int gridPlacement = gridLayout.getColumns() * gridLayout.getRows();
+//		for(int i = 0; i < gridPlacement; i++) {
+//			if(i == gridPlacement-1) {
+//				panel.add(new JButton(new NextTurnButton("next turn")));
+//			} else{
+//				JLabel label = new JLabel();
+//				panel.add(label);
+//			}
+//		}
+//		
+		GridBagLayout gameLayout = new GridBagLayout();
+		JPanel panel = new JPanel();
+		panel.setLayout(gameLayout);
+		GridBagConstraints c = new GridBagConstraints();
+		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 10;
+		c.gridy = 0;
+		panel.add(nexTurnButton, c);
+		
+		JButton button = new JButton("5");
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.ipady = 0;       //reset to default
+		c.weighty = 1.0;   //request any extra vertical space
+		c.anchor = GridBagConstraints.LAST_LINE_END; //bottom of space
+		c.insets = new Insets(10,0,0,0);  //top padding
+		c.gridx = 1;       //aligned with button 2
+		c.gridwidth = 2;   //2 columns wide
+		c.gridy = 2;       //third row
+		panel.add(button, c);
+		
 		panel.setOpaque(false);
-		int gridPlacement = gridLayout.getColumns() * gridLayout.getRows();
-		for(int i = 0; i < gridPlacement; i++) {
-			if(i == gridPlacement-1) {
-				panel.add(new JButton(new NextTurnButton("next turn")));
-			} else{
-				JLabel label = new JLabel();
-				panel.add(label);
-			}
-		}
 		
 		return panel;
 	}
@@ -276,7 +301,7 @@ public class GameDisplay extends JPanel{
 		for (Unit unit : manager.getUnits()) {
 			paintStrategy.paint(unit, camera, g);
 			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
-				paintStrategy.paint(manager.getUnits(), manager.getCities(), minimap, g);
+				paintStrategy.paint(manager.getUnits(), manager.getCities(), g);
 				paintStrategy.paint(unit.getPath(), camera, g);
 			}
 		}
