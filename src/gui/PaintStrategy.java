@@ -41,7 +41,7 @@ public class PaintStrategy {
 								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
 						break;
 					case 2: //forest
-						graphics.setColor(Color.GREEN);
+						graphics.setColor(new Color(0, 50, 0));
 						graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
 								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
 						break;
@@ -51,7 +51,7 @@ public class PaintStrategy {
 								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
 						break;
 					case 4: //sea
-						graphics.setColor(Color.BLUE);
+						graphics.setColor(new Color(0, 0, 100));
 						graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
 								tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
 						break;
