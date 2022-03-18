@@ -1,26 +1,22 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
 import configuration.GameConfiguration;
 import engine.Camera;
 import engine.Mouse;
 import engine.Position;
 import engine.building.City;
 import engine.map.Map;
+import engine.process.EntitiesManager;
 import engine.process.GameBuilder;
 import engine.unit.Unit;
-import engine.process.EntitiesManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainGui extends JFrame implements Runnable {
 
@@ -190,7 +186,8 @@ public class MainGui extends JFrame implements Runnable {
 				int y = (e.getY() + camera.getY()) / GameConfiguration.TILE_SIZE;
 				Position position = new Position(x, y);
 				Unit unit = manager.getSelectedUnit();
-				if (unit != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
+				boolean biomeIsAccessible = map.getTile(x, y).getBiome().isAccessible();
+				if (unit != null && unit.getPlayer().equals(manager.getCurrentPlayer()) && biomeIsAccessible) {
 					List<Position> path = unit.getPath();
 					if (path.isEmpty() && unit.getAp() > 0) {
 						List<Position> possibleStartPositions = new ArrayList<>();
