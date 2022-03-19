@@ -48,7 +48,8 @@ public class GameDisplay extends JPanel {
 	
 	String currentPlayer;
 	
-	JLabel label;
+	JLabel turnLabel;
+	JLabel descriptionLabel;
 
 	// game states
 	private int state;
@@ -63,7 +64,8 @@ public class GameDisplay extends JPanel {
 		this.camera = camera;
 		this.mouse = mouse;
 		this.manager = manager;
-		label = new JLabel("Tour 1 | Joueur 1");
+		turnLabel = new JLabel("Tour 1 | Joueur 1");
+		descriptionLabel = new JLabel ("");
 
 		this.state = GameConfiguration.IN_MENU;
 		this.oldState = this.state;
@@ -82,6 +84,14 @@ public class GameDisplay extends JPanel {
 
 	public JPanel getMainPanel() {
 		return this;
+	}
+
+	public JLabel getDescriptionLabel() {
+		return descriptionLabel;
+	}
+
+	public void setDescriptionLabel(String text) {
+		this.descriptionLabel.setText(text);
 	}
 
 	public JPanel createTitleScreenPanel() {
@@ -132,7 +142,7 @@ public class GameDisplay extends JPanel {
 		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
 		miniMap = new Minimap(map, manager);
 		
-		JLabel descriptionLabel = new JLabel("Description");
+		JLabel descriptionLabel = this.descriptionLabel;
 		descriptionLabel.setOpaque(true);
 		descriptionLabel.setBackground(Color.gray);
 		descriptionLabel.setForeground(Color.black);
@@ -142,10 +152,10 @@ public class GameDisplay extends JPanel {
 		ressourcesLabel.setBackground(Color.gray);
 		ressourcesLabel.setForeground(Color.black);
 		
-		JLabel nombreDeToursLabel = label;
-		nombreDeToursLabel.setOpaque(true);
-		nombreDeToursLabel.setBackground(Color.gray);
-		nombreDeToursLabel.setForeground(Color.black);
+		JLabel turnLabel = this.turnLabel;
+		turnLabel.setOpaque(true);
+		turnLabel.setBackground(Color.gray);
+		turnLabel.setForeground(Color.black);
 		
 		JButton menuButton = new JButton("Menu");
 		
@@ -156,7 +166,7 @@ public class GameDisplay extends JPanel {
 		/*
 		 * ROW 1
 		 */
-		panel.add(nombreDeToursLabel);
+		panel.add(turnLabel);
 		panel.add(ressourcesLabel);
 		panel.add(menuButton);
 		
@@ -262,7 +272,7 @@ public class GameDisplay extends JPanel {
 	}
 	
 	private void nextTurnText(String playerName) {
-		label.setText(playerName);
+		turnLabel.setText(playerName);
 	}
 
 	private class LaunchGame extends AbstractAction {

@@ -123,15 +123,22 @@ public class MainGui extends JFrame implements Runnable {
 					if (pos.getX() == x && pos.getY() == y) {
 						manager.selectUnit(unit);
 						entitySelected = true;
+						gameDisplay.setDescriptionLabel(manager.getSelectedUnit().getPlayer().getName()
+								+ " AP : " + manager.getSelectedUnit().getAp() + " HP : " + manager.getSelectedUnit().getHp()
+								+ " " + manager.getSelectedUnit().getDescription());
 						break;
 					}
 				}
+				
+				
 				if (entitySelected == false) {
 					for (City city : manager.getCities()) {
 						Position pos = city.getPosition();
 						if (pos.getX() == x && pos.getY() == y) {
 							manager.selectCity(city);
 							entitySelected = true;
+							gameDisplay.setDescriptionLabel(manager.getSelectedCity().getName() + " | " + manager.getSelectedCity().getDescription()
+									+ " | HP : " + manager.getSelectedCity().getHealth());
 							break;
 						}
 					}
