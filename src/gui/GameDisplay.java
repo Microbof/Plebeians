@@ -138,23 +138,38 @@ public class GameDisplay extends JPanel{
 		GridBagConstraints c = new GridBagConstraints();
 		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 10;
-		c.gridy = 0;
+		c.gridx = 2;
+		c.gridy = 2;
 		panel.add(nexTurnButton, c);
-		
-		JButton button = new JButton("5");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.ipady = 0;       //reset to default
-		c.weighty = 1.0;   //request any extra vertical space
-		c.anchor = GridBagConstraints.LAST_LINE_END; //bottom of space
-		c.insets = new Insets(10,0,0,0);  //top padding
-		c.gridx = 1;       //aligned with button 2
-		c.gridwidth = 2;   //2 columns wide
-		c.gridy = 2;       //third row
-		panel.add(button, c);
 
 		miniMap = new Minimap(map, manager);
-		//panel.add(miniMap);
+		c.gridx = 0;
+		c.gridy = 2;
+		panel.add(miniMap, c);
+		
+		JLabel DescriptionLabel = new JLabel("Description");
+		c.gridx = 1;
+		c.gridwidth = 3;
+		c.gridy = 2;
+		panel.add(DescriptionLabel);
+		
+		JLabel RessourcesLabel = new JLabel("Ressources");
+		c.gridx = 1;
+		c.gridwidth = 3;
+		c.gridy = 0;
+		panel.add(RessourcesLabel);
+		
+		JLabel nombreDeToursLabel = new JLabel("Nombre de tours");
+		c.gridx = 1;
+		c.gridwidth = 3;
+		c.gridy = 0;
+		panel.add(nombreDeToursLabel);
+		
+		JButton menuButton = new JButton("Menu");
+		c.gridx = 2;
+		c.gridwidth = 3;
+		c.gridy = 0;
+		panel.add(menuButton);
 		
 		panel.setOpaque(false);
 		
