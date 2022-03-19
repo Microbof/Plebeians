@@ -1,26 +1,22 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
 import configuration.GameConfiguration;
 import engine.Camera;
 import engine.Mouse;
 import engine.Position;
 import engine.building.City;
 import engine.map.Map;
+import engine.process.EntitiesManager;
 import engine.process.GameBuilder;
 import engine.unit.Unit;
-import engine.process.EntitiesManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainGui extends JFrame implements Runnable {
 
@@ -140,17 +136,17 @@ public class MainGui extends JFrame implements Runnable {
 						}
 					}
 				}
-			}
-			else if (e.getButton() == 3) {
+			} else if (e.getButton() == 3) {
 				if (MouseMotion.isDragged) {
 					MouseMotion.isDragged = false;
 					MouseMotion.init = false;
-					if(manager.getSelectedUnit() != null && manager.getSelectedUnit().getPath() != null && !manager.getSelectedUnit().getPath().isEmpty()) {
-						manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
+					if (manager.getSelectedUnit() != null && manager.getSelectedUnit().getPath() != null && !manager.getSelectedUnit().getPath().isEmpty()) {
+						//manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
+						manager.getSelectedUnit().setPendingAction(true);
 					}
 				}
 			}
-			
+
 			/*
 			 * else if (e.getButton() == 3) { int x = (e.getX() + camera.getX()) /
 			 * GameConfiguration.TILE_SIZE; int y = (e.getY() + camera.getY()) /
@@ -190,21 +186,23 @@ public class MainGui extends JFrame implements Runnable {
 				int y = (e.getY() + camera.getY()) / GameConfiguration.TILE_SIZE;
 				Position position = new Position(x, y);
 				Unit unit = manager.getSelectedUnit();
-				if (unit != null) {
+				boolean biomeIsAccessible = map.getTile(x, y).getBiome().isAccessible();
+				if (unit != null && unit.getPlayer().equals(manager.getCurrentPlayer()) && biomeIsAccessible) {
 					List<Position> path = unit.getPath();
-					if (path.isEmpty()) {
+					if (path.isEmpty() && unit.getAp() > 0) {
 						List<Position> possibleStartPositions = new ArrayList<>();
 						for (int i = -1; i <= 1; i++) {
 							for (int j = -1; j <= 1; j++) {
 								if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
-									 //System.out.println((unit.getPosition().getX() + i) + "," + (unit.getPosition().getY() + j));
+									// System.out.println((unit.getPosition().getX() + i) + "," +
+									// (unit.getPosition().getY() + j));
 									possibleStartPositions.add(new Position(unit.getPosition().getX() + i, unit.getPosition().getY() + j));
 								}
 							}
 						}
 						for (Position p : possibleStartPositions) {
 							if (position.equals(p)) {
-								//System.out.println("init path");
+								// System.out.println("init path");
 								init = true;
 								unit.addPath(position);
 							}
@@ -213,24 +211,24 @@ public class MainGui extends JFrame implements Runnable {
 					}
 					if (path.size() > 2) {
 						if (path.get(path.size() - 2).equals(position) && !addedPath.equals(position)) {
-							//System.out.println("remove path");
+							// System.out.println("remove path");
 							removedPath = path.get(path.size() - 1);
 							unit.removeLastPath();
 						}
 					}
 					if (path.size() == 2 && position.equals(path.get(0))) {
-						System.out.println("remove path");
+						// System.out.println("remove path");
 						removedPath = path.get(path.size() - 1);
 						unit.removeLastPath();
 					}
-					if (removedPath != null && init) {
+					if (removedPath != null && init && path.size() < unit.getAp()) {
 						if (!path.get(path.size() - 1).equals(position)) {
-							//System.out.println("add path");
+							// System.out.println("add path");
 							unit.addPath(position);
 							addedPath = position;
 						}
-					} else if (init && !path.get(path.size() - 1).equals(position)) {
-						//System.out.println("add path");
+					} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp()) {
+						// System.out.println("add path");
 						unit.addPath(position);
 						addedPath = position;
 					}
