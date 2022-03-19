@@ -31,6 +31,7 @@ public class GameBuilder {
 	
 	private static void initializePlayer(EntitiesManager manager) {
 		Player player = new Player();
+		player.setName("Joueur 1");
 		player.setColor(GameConfiguration.PLAYER1COLOR);
 		manager.addPlayer(player);
 		Position posCity = new Position(10,10);
@@ -51,6 +52,7 @@ public class GameBuilder {
 	
 	private static void initializePlayer2(EntitiesManager manager) {
 		Player player = new Player();
+		player.setName("Joueur 2");
 		player.setColor(GameConfiguration.PLAYER2COLOR);
 		manager.addPlayer(player);
 		Position posCity = new Position(5,5);

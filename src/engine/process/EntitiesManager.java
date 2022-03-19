@@ -28,9 +28,12 @@ public class EntitiesManager {
 	private City selectedCity = null;
 	
 	private Player currentPlayer;
+	
+	private int turn;
 
 	public EntitiesManager(Map map) {
 		this.map = map;
+		turn = 1;
 	}
 
 	public void update() {
@@ -57,6 +60,7 @@ public class EntitiesManager {
 				unit.resetAp();
 			}
 		}
+		turn = getTurn() + 1;
 		getNextTile();
 	}
 	
@@ -194,5 +198,9 @@ public class EntitiesManager {
 
 	public void setCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer = currentPlayer;
+	}
+
+	public int getTurn() {
+		return turn;
 	}
 }

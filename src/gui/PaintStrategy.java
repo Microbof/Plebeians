@@ -2,10 +2,14 @@ package gui;
 
 import configuration.GameConfiguration;
 import engine.Camera;
+import engine.Player;
 import engine.Position;
+import engine.building.Building;
 import engine.building.City;
 import engine.map.Map;
+import engine.map.Minimap;
 import engine.map.Tile;
+import engine.process.EntitiesManager;
 import engine.unit.Unit;
 import engine.unit.UnitBuilder;
 import engine.unit.UnitFighter;
@@ -110,32 +114,6 @@ public class PaintStrategy {
 
 	}
 	
-	public void paint(List<Unit> units, List<City> cities, Graphics graphics) {
-        int minimapOffset = 10;
-        graphics.setColor(Color.black);
-        graphics.fillRect(minimapOffset,
-                GameConfiguration.WINDOW_HEIGHT - 2 * GameConfiguration.LINE_COUNT - minimapOffset,
-                2 * GameConfiguration.COLUMN_COUNT, 2 * GameConfiguration.LINE_COUNT);
-
-        for (City city : cities) {
-            Position cityPosition = city.getPosition();
-            graphics.setColor(city.getPlayer().getColor());
-            graphics.fillRect(minimapOffset + 2 * cityPosition.getX(), GameConfiguration.WINDOW_HEIGHT
-                    - 2 * GameConfiguration.LINE_COUNT - minimapOffset + 2 * cityPosition.getY(), 2, 2);
-        }
-
-        for (Unit unit : units) {
-            Position unitPosition = unit.getPosition();
-            if (unit.isSelected()) {
-                graphics.setColor(Color.RED);
-            } else {
-                graphics.setColor(unit.getPlayer().getColor());
-            }
-            graphics.fillRect(minimapOffset + 2 * unitPosition.getX(), GameConfiguration.WINDOW_HEIGHT
-                    - 2 * GameConfiguration.LINE_COUNT - minimapOffset + 2 * unitPosition.getY(), 2, 2);
-        }
-    }
-	
 	public void paint(Unit unit, Camera camera, Graphics graphics) {
 		Position position = unit.getPosition();
 		int tileSize = GameConfiguration.TILE_SIZE;
@@ -218,6 +196,64 @@ public class PaintStrategy {
 				graphics.setColor(Color.green);
 				graphics.fillRect(p.getX()*tileSize - camera.getX(), p.getY()*tileSize - 20 - camera.getY(), widthLife, 10);
 			}
+		}
+	}
+
+	public void paint(Minimap minimap, Map map, EntitiesManager manager, Graphics graphics){
+		int width = minimap.getWidth();
+		int height = minimap.getHeight();
+		int columnCount = map.getColumnCount();
+		int lineCount = map.getLineCount();
+		float sizeX = (float)width/(float)columnCount;
+		float sizeY = (float)height/(float)lineCount;
+
+		graphics.setColor(Color.BLACK);
+		graphics.drawLine(0, 0, width-1, 0);
+		graphics.drawLine(width-1, 0, width-1, height-1);
+		graphics.drawLine(0, 0, 0, height-1);
+		graphics.drawLine(0, height-1, width-1, height-1);
+
+
+		List<Player> players = manager.getPlayers();
+
+		List<Unit> units = manager.getUnits();
+		for(Unit unit : units){
+			Position position = unit.getPosition();
+			int x = position.getX();
+			int y = position.getY();
+			for(Player player : players){
+				if(unit.getPlayer().equals(player)){
+					graphics.setColor(player.getColor());
+					break;
+				}
+			}
+			graphics.drawRect((int)(x*sizeX), (int)(y*sizeY), (int)sizeX, (int)sizeY);
+		}
+		List<City> cities = manager.getCities();
+		for(City city : cities){
+			Position position = city.getPosition();
+			int x = position.getX();
+			int y = position.getY();
+			for(Player player : players){
+				if(city.getPlayer().equals(player)){
+					graphics.setColor(player.getColor());
+					break;
+				}
+			}
+			graphics.drawRect((int)(x*sizeX), (int)(y*sizeY), (int)sizeX, (int)sizeY);
+		}
+		List<Building> buildings = manager.getBuildings();
+		for(Building building : buildings){
+			Position position = building.getPosition();
+			int x = position.getX();
+			int y = position.getY();
+			for(Player player : players){
+				if(building.getPlayer().equals(player)){
+					graphics.setColor(player.getColor());
+					break;
+				}
+			}
+			graphics.drawRect((int)(x*sizeX), (int)(y*sizeY), (int)sizeX, (int)sizeY);
 		}
 	}
 
