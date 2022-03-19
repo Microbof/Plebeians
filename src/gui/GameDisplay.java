@@ -12,6 +12,7 @@ import java.awt.Insets;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -22,6 +23,7 @@ import javax.swing.SwingConstants;
 import configuration.GameConfiguration;
 import engine.Camera;
 import engine.Mouse;
+import engine.Player;
 import engine.building.City;
 import engine.map.Map;
 import engine.map.Minimap;
@@ -43,6 +45,10 @@ public class GameDisplay extends JPanel {
 	private Camera camera;
 
 	private Mouse mouse;
+	
+	String currentPlayer;
+	
+	JLabel label;
 
 	// game states
 	private int state;
@@ -57,6 +63,7 @@ public class GameDisplay extends JPanel {
 		this.camera = camera;
 		this.mouse = mouse;
 		this.manager = manager;
+		label = new JLabel("Tour 1 | Joueur 1");
 
 		this.state = GameConfiguration.IN_MENU;
 		this.oldState = this.state;
@@ -116,20 +123,6 @@ public class GameDisplay extends JPanel {
 	}
 
 	private JPanel createGamePanel() {
-//		GridLayout gridLayout = new GridLayout(4,3);
-//		JPanel panel = new JPanel(gridLayout);
-//		panel.setOpaque(false);
-//		int gridPlacement = gridLayout.getColumns() * gridLayout.getRows();
-//		for(int i = 0; i < gridPlacement; i++) {
-//			if(i == gridPlacement-1) {
-//				panel.add(new JButton(new NextTurnButton("next turn")));
-//			} else{
-//				JLabel label = new JLabel();
-//				panel.add(label);
-//			}
-//		}
-//		
-
 		JPanel panel = new JPanel(new GridLayout(6, 3));
 		
 		/*
@@ -149,7 +142,7 @@ public class GameDisplay extends JPanel {
 		ressourcesLabel.setBackground(Color.gray);
 		ressourcesLabel.setForeground(Color.black);
 		
-		JLabel nombreDeToursLabel = new JLabel("Nombre de tours");
+		JLabel nombreDeToursLabel = label;
 		nombreDeToursLabel.setOpaque(true);
 		nombreDeToursLabel.setBackground(Color.gray);
 		nombreDeToursLabel.setForeground(Color.black);
@@ -206,7 +199,7 @@ public class GameDisplay extends JPanel {
 
 		return panel;
 	}
-
+	
 	private void manageState() {
 		switch (state) {
 		case GameConfiguration.IN_MENU:
@@ -267,6 +260,10 @@ public class GameDisplay extends JPanel {
 		}
 		getMainPanel().validate();
 	}
+	
+	private void nextTurnText(String playerName) {
+		label.setText(playerName);
+	}
 
 	private class LaunchGame extends AbstractAction {
 
@@ -319,6 +316,7 @@ public class GameDisplay extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			manager.nextTurn();
+			nextTurnText("Tour " + manager.getTurn() +  " | " + manager.getCurrentPlayer().getName());
 		}
 
 	}
@@ -341,5 +339,4 @@ public class GameDisplay extends JPanel {
 		}
 		miniMap.repaint();
 	}
-
 }

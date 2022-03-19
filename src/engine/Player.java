@@ -12,6 +12,8 @@ import engine.unit.Unit;
 public class Player {
 
 	private int score;
+	
+	private String name;
 
 	// tab influence peut etre plutot dans city ? ou les deux ?
 	private List<Tile> influence = new ArrayList<>();
@@ -20,6 +22,10 @@ public class Player {
 
 	public Player() {
 		score = 0;
+	}
+	
+	public Player(String name) {
+		this.setName(name);
 	}
 
 	public int getScore() {
@@ -42,6 +48,14 @@ public class Player {
 
 	public Color getColor() {
 		return color;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
