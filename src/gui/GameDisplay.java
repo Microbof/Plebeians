@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -27,28 +28,27 @@ import engine.map.Minimap;
 import engine.process.EntitiesManager;
 import engine.unit.Unit;
 
-public class GameDisplay extends JPanel{
+public class GameDisplay extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private PaintStrategy paintStrategy = new PaintStrategy();
-	
+
 	private EntitiesManager manager;
-	
+
 	private Map map;
-	
+
 	private Minimap miniMap;
-	
+
 	private Camera camera;
-	
+
 	private Mouse mouse;
-	
 
 	// game states
 	private int state;
 	private int oldState;
-	
-	//Panels of the game
+
+	// Panels of the game
 	private JPanel titleScreenPanel;
 	private JPanel gamePanel;
 
@@ -57,67 +57,64 @@ public class GameDisplay extends JPanel{
 		this.camera = camera;
 		this.mouse = mouse;
 		this.manager = manager;
-		
+
 		this.state = GameConfiguration.IN_MENU;
 		this.oldState = this.state;
-		this.setLayout(new GridLayout(1,1));
+		this.setLayout(new GridLayout(1, 1));
 		this.setOpaque(false);
-				
+
 		gamePanel = createGamePanel();
 		gamePanel.setVisible(false);
-		
+
 		titleScreenPanel = createTitleScreenPanel();
 		titleScreenPanel.setVisible(true);
-		
+
 		getMainPanel().add(titleScreenPanel);
-		
+
 	}
-	
+
 	public JPanel getMainPanel() {
 		return this;
 	}
-	
+
 	public JPanel createTitleScreenPanel() {
-		JPanel titleScreenPanel = new JPanel(new GridLayout(2,1));
+		JPanel titleScreenPanel = new JPanel(new GridLayout(2, 1));
 		JPanel titleScreenButtonsPanel = new JPanel();
 		titleScreenButtonsPanel.setLayout(new BoxLayout(titleScreenButtonsPanel, BoxLayout.PAGE_AXIS));
 
 		titleScreenButtonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		JLabel gameTitle = new JLabel("<html><h1>Plebeians</h1></html>");
 //		gameTitle.setFont(new Font("Sans Serif", Font.ROMAN_BASELINE, 20));
 		gameTitle.setAlignmentX(SwingConstants.CENTER);
 		gameTitle.setAlignmentY(SwingConstants.CENTER);
-		
+
 		gameTitle.setHorizontalAlignment(JLabel.CENTER);
 		gameTitle.setVerticalAlignment(JLabel.CENTER);
-		
+
 		JButton newPartyButton = new JButton(new LaunchGame("Nouvelle Partie"));
 		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		newPartyButton.setMargin(new Insets(10, 20, 10, 20));
-		
+
 		JButton quitButton = new JButton(new ExitGameButton("Quitter le jeu"));
 		quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		quitButton.setMargin(new Insets(10, 20, 10, 20));
-	
+
 		Dimension minSize = new Dimension(5, 10);
 		Dimension prefSize = new Dimension(5, 20);
 		Dimension maxSize = new Dimension(Short.MAX_VALUE, 20);
-		
 
 		titleScreenButtonsPanel.add(newPartyButton);
 		titleScreenButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
 		titleScreenButtonsPanel.add(quitButton);
 		titleScreenButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
-		
 
 		titleScreenPanel.add(gameTitle);
 		titleScreenPanel.add(titleScreenButtonsPanel);
-		
+
 		return titleScreenPanel;
 	}
-	
-	
+
 	private JPanel createGamePanel() {
 //		GridLayout gridLayout = new GridLayout(4,3);
 //		JPanel panel = new JPanel(gridLayout);
@@ -132,169 +129,189 @@ public class GameDisplay extends JPanel{
 //			}
 //		}
 //		
-		GridBagLayout gameLayout = new GridBagLayout();
-		JPanel panel = new JPanel();
-		panel.setLayout(gameLayout);
-		GridBagConstraints c = new GridBagConstraints();
-		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 2;
-		c.gridy = 2;
-		panel.add(nexTurnButton, c);
 
+		JPanel panel = new JPanel(new GridLayout(6, 3));
+		
+		/*
+		 * Definition of all the component of the panel
+		 */
+		
+		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
 		miniMap = new Minimap(map, manager);
-		c.gridx = 0;
-		c.gridy = 2;
-		panel.add(miniMap, c);
 		
-		JLabel DescriptionLabel = new JLabel("Description");
-		c.gridx = 1;
-		c.gridwidth = 3;
-		c.gridy = 2;
-		panel.add(DescriptionLabel);
+		JLabel descriptionLabel = new JLabel("Description");
+		descriptionLabel.setOpaque(true);
+		descriptionLabel.setBackground(Color.gray);
+		descriptionLabel.setForeground(Color.black);
 		
-		JLabel RessourcesLabel = new JLabel("Ressources");
-		c.gridx = 1;
-		c.gridwidth = 3;
-		c.gridy = 0;
-		panel.add(RessourcesLabel);
+		JLabel ressourcesLabel = new JLabel("Ressources");
+		ressourcesLabel.setOpaque(true);
+		ressourcesLabel.setBackground(Color.gray);
+		ressourcesLabel.setForeground(Color.black);
 		
 		JLabel nombreDeToursLabel = new JLabel("Nombre de tours");
-		c.gridx = 1;
-		c.gridwidth = 3;
-		c.gridy = 0;
-		panel.add(nombreDeToursLabel);
+		nombreDeToursLabel.setOpaque(true);
+		nombreDeToursLabel.setBackground(Color.gray);
+		nombreDeToursLabel.setForeground(Color.black);
 		
 		JButton menuButton = new JButton("Menu");
-		c.gridx = 2;
-		c.gridwidth = 3;
-		c.gridy = 0;
+		
+		/*
+		 * Adding the above components to the game panel
+		 */
+		
+		/*
+		 * ROW 1
+		 */
+		panel.add(nombreDeToursLabel);
+		panel.add(ressourcesLabel);
 		panel.add(menuButton);
 		
-		panel.setOpaque(false);
+		/*
+		 * ROW 2
+		 */
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
 		
+		/*
+		 * ROW 3
+		 */
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		
+		/*
+		 * ROW 4
+		 */
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		
+		/*
+		 * ROW 5
+		 */
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		
+		/*
+		 * ROW 6
+		 */
+		panel.add(miniMap);
+		panel.add(descriptionLabel);
+		panel.add(nexTurnButton);
+
+		panel.setOpaque(false);
+
 		return panel;
 	}
-	
+
 	private void manageState() {
-		switch(state)
-		{
-			case GameConfiguration.IN_MENU:
-				if(oldState == GameConfiguration.IN_OPTION)
-				{
+		switch (state) {
+		case GameConfiguration.IN_MENU:
+			if (oldState == GameConfiguration.IN_OPTION) {
 //					optionPanel.setVisible(false);
 //					getMainPanel().remove(optionPanel);
-				}
-				else if(oldState == GameConfiguration.IN_PAUSE_MENU)
-				{
+			} else if (oldState == GameConfiguration.IN_PAUSE_MENU) {
 //					pauseMenuPanel.setVisible(false);
 //					getMainPanel().remove(pauseMenuPanel);
 //					manager.clean();
 //					camera.reset();
-				}
-				
-				titleScreenPanel.setVisible(true);
-				getMainPanel().add(titleScreenPanel);
-				break;
-				
-			case GameConfiguration.IN_GAME:
-				if(oldState == GameConfiguration.IN_PAUSE_MENU)
-				{
+			}
+
+			titleScreenPanel.setVisible(true);
+			getMainPanel().add(titleScreenPanel);
+			break;
+
+		case GameConfiguration.IN_GAME:
+			if (oldState == GameConfiguration.IN_PAUSE_MENU) {
 //					pauseMenuPanel.setVisible(false);
 //					getMainPanel().remove(pauseMenuPanel);
-				}
-				else if(oldState == GameConfiguration.IN_MENU)
-				{
-					titleScreenPanel.setVisible(false);
-					getMainPanel().remove(titleScreenPanel);
-				}
-				gamePanel.setVisible(true);
-				getMainPanel().add(gamePanel);
-				break;
-				
-			case GameConfiguration.IN_OPTION:
-				if(oldState == GameConfiguration.IN_PAUSE_MENU)
-				{
+			} else if (oldState == GameConfiguration.IN_MENU) {
+				titleScreenPanel.setVisible(false);
+				getMainPanel().remove(titleScreenPanel);
+			}
+			gamePanel.setVisible(true);
+			getMainPanel().add(gamePanel);
+			break;
+
+		case GameConfiguration.IN_OPTION:
+			if (oldState == GameConfiguration.IN_PAUSE_MENU) {
 //					gamePanel.setVisible(false);
 //					pauseMenuPanel.setVisible(false);
 //					getMainPanel().remove(gamePanel);
 //					getMainPanel().remove(pauseMenuPanel);
-				}
-				else if(oldState == GameConfiguration.IN_MENU)
-				{
-					titleScreenPanel.setVisible(false);
-					getMainPanel().remove(titleScreenPanel);
-				}
+			} else if (oldState == GameConfiguration.IN_MENU) {
+				titleScreenPanel.setVisible(false);
+				getMainPanel().remove(titleScreenPanel);
+			}
 //				optionPanel.setVisible(true);
 //				getMainPanel().add(optionPanel);
-				break;
-				
-			case GameConfiguration.IN_PAUSE_MENU:
-				if(oldState == GameConfiguration.IN_OPTION)
-				{
+			break;
+
+		case GameConfiguration.IN_PAUSE_MENU:
+			if (oldState == GameConfiguration.IN_OPTION) {
 //					optionPanel.setVisible(false);
 //					getMainPanel().remove(optionPanel);
-				}
-				else if(oldState == GameConfiguration.IN_GAME)
-				{
+			} else if (oldState == GameConfiguration.IN_GAME) {
 //					gamePanel.setVisible(false);
 //					getMainPanel().remove(gamePanel);
-				}
+			}
 //				pauseMenuPanel.setVisible(true);
 //				getMainPanel().add(pauseMenuPanel);
-				break;
-			
-			
-			default:
-				break;
+			break;
+
+		default:
+			break;
 		}
 		getMainPanel().validate();
 	}
-	
+
 	private class LaunchGame extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		public LaunchGame(String name) {
 			super(name);
 		}
-		
+
 		@Override
-		public void actionPerformed(ActionEvent e) {	
+		public void actionPerformed(ActionEvent e) {
 //			map = GameBuilder.buildMap(selectedMap, graphicsManager, manager);
 //			
 //			GameBuilder.buildFaction(manager, boxPlayer1.getSelectedIndex() + 1, boxPlayer2.getSelectedIndex() + 1, map, maxPopulation, startingMoney);
 //			manager.setMap(map);
-			
+
 			gamePanel = createGamePanel();
 			gamePanel.setVisible(false);
-			
+
 			oldState = state;
 			state = GameConfiguration.IN_GAME;
-			
+
 			manageState();
 		}
 	}
-	
+
 	private class ExitGameButton extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		public ExitGameButton(String name) {
 			super(name);
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
 		}
-		
+
 	}
-	
-	private class NextTurnButton extends AbstractAction{
+
+	private class NextTurnButton extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
-		
+
 		public NextTurnButton(String name) {
 			super(name);
 		}
@@ -303,26 +320,26 @@ public class GameDisplay extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			manager.nextTurn();
 		}
-		
+
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if(this.paintStrategy == null) {
+		if (this.paintStrategy == null) {
 			paintStrategy = new PaintStrategy();
 		}
 		paintStrategy.paint(map, camera, g);
-		
+
 		for (City city : manager.getCities()) {
 			paintStrategy.paint(city, camera, g);
 		}
 		for (Unit unit : manager.getUnits()) {
 			paintStrategy.paint(unit, camera, g);
-			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
+			if (unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
 				paintStrategy.paint(unit.getPath(), camera, g);
 			}
 		}
 		miniMap.repaint();
 	}
-	
+
 }
