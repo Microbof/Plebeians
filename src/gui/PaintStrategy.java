@@ -123,6 +123,27 @@ public class PaintStrategy {
 		int y = position.getY();
 		int x = position.getX();
 
+		// paint path
+		if (!unit.getPath().isEmpty()) {
+			List<Position> path = unit.getPath();
+			graphics.setColor(Color.RED);
+			graphics.drawLine(unit.getPosition().getX() * tileSize - camera.getX() + (tileSize / 2), unit.getPosition().getY() * tileSize - camera.getY() + (tileSize / 2), path.get(0).getX() * tileSize - camera.getX() + (tileSize / 2), path.get(0).getY() * tileSize - camera.getY() + (tileSize / 2));
+			
+			for (int i = 0; i<path.size()-1; i++) {
+				if (path.get(i).getX() * tileSize - camera.getX() + tileSize >= 0) {
+					if (path.get(i).getX() * tileSize - camera.getX() <= width) {
+						if (path.get(i).getY() * tileSize - camera.getY() <= height) {
+							if (path.get(i).getY() * tileSize - camera.getY() + tileSize >= 0) {
+								graphics.setColor(Color.RED);
+								graphics.drawLine(path.get(i).getX() * tileSize - camera.getX() + (tileSize / 2), path.get(i).getY() * tileSize - camera.getY() + (tileSize / 2), path.get(i+1).getX() * tileSize - camera.getX() + (tileSize / 2), path.get(i+1).getY() * tileSize - camera.getY() + (tileSize / 2));
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		// paint unit
 		if (x * tileSize - camera.getX() + tileSize >= 0) {
 			if (x * tileSize - camera.getX() <= width) {
 				if (y * tileSize - camera.getY() <= height) {
@@ -159,25 +180,7 @@ public class PaintStrategy {
 				}
 			}
 		}
-	}
-	
-	public void paint(List<Position> path, Camera camera, Graphics graphics) {
-		int tileSize = GameConfiguration.TILE_SIZE;
-		int width = GameConfiguration.WINDOW_WIDTH;
-		int height = GameConfiguration.WINDOW_HEIGHT;
-		for (int i = 0; i<path.size()-1; i++) {
-			if (path.get(i).getX() * tileSize - camera.getX() + tileSize >= 0) {
-				if (path.get(i).getX() * tileSize - camera.getX() <= width) {
-					if (path.get(i).getY() * tileSize - camera.getY() <= height) {
-						if (path.get(i).getY() * tileSize - camera.getY() + tileSize >= 0) {
-							graphics.setColor(Color.RED);
-							graphics.drawLine(path.get(i).getX() * tileSize - camera.getX() + (tileSize / 2), path.get(i).getY() * tileSize - camera.getY() + (tileSize / 2), path.get(i+1).getX() * tileSize - camera.getX() + (tileSize / 2), path.get(i+1).getY() * tileSize - camera.getY() + (tileSize / 2));
-						}
-					}
-				}
-			}
-		}
-	}
+	}	
 
 	public void paintHealthbar(Unit unit, Graphics graphics, Camera camera) {
 		int tileSize = GameConfiguration.TILE_SIZE;

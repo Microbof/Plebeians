@@ -17,6 +17,8 @@ public class Unit extends Entity {
 	private int ap = 5;
 	private int maxAp = 5;
 	private boolean pendingAction = false;
+	private int attack = 20;
+	private int defense = 10;
 
 	public Unit(int hp, int hpMax, String description, Position position, Player player, int maxAp) {
 		super(hp, hpMax, description, position, player);
@@ -60,6 +62,13 @@ public class Unit extends Entity {
 		// System.out.println("unit speed : " + vx + "," + vy);
 		speed.setVx(vx);
 		speed.setVy(vy);
+	}
+	
+	public void attack(Unit enemy) {
+		this.setHp(this.getHp() - enemy.defense);
+		enemy.setHp(enemy.getHp() - this.attack);
+		System.out.println("attack !");
+		this.ap -= 1;
 	}
 
 	public void calculateSpeed(Position p) {

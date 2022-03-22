@@ -22,6 +22,8 @@ public class EntitiesManager {
 	private List<Building> buildings = new ArrayList<>();
 
 	private List<City> cities = new ArrayList<>();
+	
+	private List<Unit> removeListUnit = new ArrayList<>();
 
 	private Unit selectedUnit = null;
 
@@ -39,8 +41,16 @@ public class EntitiesManager {
 	public void update() {
 
 		for (Unit unit : units) {
+			if(unit.getHp() <= 0) {
+				removeListUnit.add(unit);
+			}
 			unit.update(map);
 		}
+		
+		for(Unit unit : removeListUnit) {
+			units.remove(unit);
+		}
+		
 
 		/*for (City city : cities) {
 			// update
