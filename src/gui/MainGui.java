@@ -191,57 +191,59 @@ public class MainGui extends JFrame implements Runnable {
 				isDragged = true;
 				int x = (e.getX() + camera.getX()) / GameConfiguration.TILE_SIZE;
 				int y = (e.getY() + camera.getY()) / GameConfiguration.TILE_SIZE;
-				Position position = new Position(x, y);
-				Unit unit = manager.getSelectedUnit();
-				boolean biomeIsAccessible = map.getTile(x, y).getBiome().isAccessible();
-				if (unit != null && unit.getPlayer().equals(manager.getCurrentPlayer()) && biomeIsAccessible) {
-					List<Position> path = unit.getPath();
-					if (path.isEmpty() && unit.getAp() > 0) {
-						List<Position> possibleStartPositions = new ArrayList<>();
-						for (int i = -1; i <= 1; i++) {
-							for (int j = -1; j <= 1; j++) {
-								if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
-									// System.out.println((unit.getPosition().getX() + i) + "," +
-									// (unit.getPosition().getY() + j));
-									possibleStartPositions.add(new Position(unit.getPosition().getX() + i, unit.getPosition().getY() + j));
+				if (x >= 0 && y >= 0 && x <= GameConfiguration.COLUMN_COUNT && y <= GameConfiguration.LINE_COUNT) {
+					Position position = new Position(x, y);
+					Unit unit = manager.getSelectedUnit();
+					boolean biomeIsAccessible;
+					biomeIsAccessible = map.getTile(x, y).getBiome().isAccessible();
+					if (unit != null && unit.getPlayer().equals(manager.getCurrentPlayer()) && biomeIsAccessible) {
+						List<Position> path = unit.getPath();
+						if (path.isEmpty() && unit.getAp() > 0) {
+							List<Position> possibleStartPositions = new ArrayList<>();
+							for (int i = -1; i <= 1; i++) {
+								for (int j = -1; j <= 1; j++) {
+									if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
+										// System.out.println((unit.getPosition().getX() + i) + "," +
+										// (unit.getPosition().getY() + j));
+										possibleStartPositions.add(new Position(unit.getPosition().getX() + i, unit.getPosition().getY() + j));
+									}
 								}
 							}
+							for (Position p : possibleStartPositions) {
+								if (position.equals(p)) {
+									// System.out.println("init path");
+									init = true;
+									unit.addPath(position);
+								}
+							}
+
 						}
-						for (Position p : possibleStartPositions) {
-							if (position.equals(p)) {
-								// System.out.println("init path");
-								init = true;
-								unit.addPath(position);
+						if (path.size() > 2) {
+							if (path.get(path.size() - 2).equals(position) && !addedPath.equals(position)) {
+								// System.out.println("remove path");
+								removedPath = path.get(path.size() - 1);
+								unit.removeLastPath();
 							}
 						}
-
-					}
-					if (path.size() > 2) {
-						if (path.get(path.size() - 2).equals(position) && !addedPath.equals(position)) {
+						if (path.size() == 2 && position.equals(path.get(0))) {
 							// System.out.println("remove path");
 							removedPath = path.get(path.size() - 1);
 							unit.removeLastPath();
 						}
-					}
-					if (path.size() == 2 && position.equals(path.get(0))) {
-						// System.out.println("remove path");
-						removedPath = path.get(path.size() - 1);
-						unit.removeLastPath();
-					}
-					if (removedPath != null && init && path.size() < unit.getAp()) {
-						if (!path.get(path.size() - 1).equals(position)) {
+						if (removedPath != null && init && path.size() < unit.getAp()) {
+							if (!path.get(path.size() - 1).equals(position)) {
+								// System.out.println("add path");
+								unit.addPath(position);
+								addedPath = position;
+							}
+						} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp()) {
 							// System.out.println("add path");
 							unit.addPath(position);
 							addedPath = position;
 						}
-					} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp()) {
-						// System.out.println("add path");
-						unit.addPath(position);
-						addedPath = position;
 					}
 				}
 			}
-
 		}
 
 		@Override
