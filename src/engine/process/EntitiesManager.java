@@ -51,6 +51,7 @@ public class EntitiesManager {
 		int i = players.indexOf(currentPlayer) + 1;
 		if(i >= players.size()) {
 			currentPlayer = players.get(0);
+			turn = getTurn() + 1;
 		}
 		else {
 			currentPlayer = players.get(i);
@@ -60,7 +61,7 @@ public class EntitiesManager {
 				unit.resetAp();
 			}
 		}
-		turn = getTurn() + 1;
+		
 		getNextTile();
 	}
 	
