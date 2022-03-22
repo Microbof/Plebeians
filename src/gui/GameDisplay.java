@@ -4,12 +4,16 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionEvent;
+import java.util.List;
+
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -19,6 +23,7 @@ import javax.swing.SwingConstants;
 import configuration.GameConfiguration;
 import engine.Camera;
 import engine.Mouse;
+import engine.Player;
 import engine.building.City;
 import engine.map.Map;
 import engine.map.Minimap;
