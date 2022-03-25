@@ -58,6 +58,8 @@ public class EntitiesManager {
 		
 		for(Unit unit : removeListUnit) {
 			units.remove(unit);
+			builders.remove(unit);
+			fighters.remove(unit);
 		}
 		
 
