@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Random;
 
 import engine.Player;
+import engine.Position;
 import engine.building.Building;
 import engine.building.City;
 import engine.map.Map;
 import engine.map.Tile;
 import engine.unit.Unit;
+import engine.unit.UnitBuilder;
+import engine.unit.UnitFighter;
 
 public class EntitiesManager {
 
@@ -18,6 +21,10 @@ public class EntitiesManager {
 	private List<Player> players = new ArrayList<>();
 
 	private List<Unit> units = new ArrayList<>();
+
+	private List<UnitBuilder> builders = new ArrayList<>();
+
+	private List<UnitFighter> fighters = new ArrayList<>();
 
 	private List<Building> buildings = new ArrayList<>();
 
@@ -30,6 +37,8 @@ public class EntitiesManager {
 	private City selectedCity = null;
 	
 	private Player currentPlayer;
+	
+	private boolean canConstruct = true;
 	
 	private int turn;
 
@@ -58,6 +67,7 @@ public class EntitiesManager {
 	}
 	
 	public void nextTurn() {
+		canConstruct = true;
 		int i = players.indexOf(currentPlayer) + 1;
 		if(i >= players.size()) {
 			currentPlayer = players.get(0);
@@ -73,6 +83,47 @@ public class EntitiesManager {
 		}
 		
 		getNextTile();
+	}
+	
+	public Position getNearestTile(Position position) {
+		int srcY = position.getY();
+		int srcX = position.getX();
+		Tile nearestTile = null;
+		for(int i=1;i<99;i++) {
+			int j = -i;
+			for(int k=0; k<=i;k++) {
+				if(((srcY+j>0 && srcY+j<100)&&(srcX+k>0 && srcX+k<100)) && nearestTile == null) {
+					if(map.getTile(srcY+j, srcX+k).getUnit()==null) {
+						nearestTile = map.getTile(srcY+j, srcX+k);
+					} else if (map.getTile(srcY+k, srcX+j).getUnit()==null) {
+						nearestTile = map.getTile(srcY+k, srcX+j);
+					}
+				}
+				if(((srcY-j>0 && srcY-j<100)&&(srcX+k>0 && srcX+k<100)) && nearestTile == null) {
+					if(map.getTile(srcY-j, srcX+k).getUnit()==null) {
+						nearestTile = map.getTile(srcY-j, srcX+k);
+					} else if (map.getTile(srcY+k, srcX-j).getUnit()==null) {
+						nearestTile = map.getTile(srcY+k, srcX-j);
+					}
+				}
+				if(((srcY+j>0 && srcY+j<100)&&(srcX-k>0 && srcX-k<100)) && nearestTile == null) {
+					if(map.getTile(srcY+j, srcX-k).getUnit()==null) {
+						nearestTile = map.getTile(srcY+j, srcX-k);
+					} else if (map.getTile(srcY-k, srcX+j).getUnit()==null) {
+						nearestTile = map.getTile(srcY-k, srcX+j);
+					}
+				}
+				if(((srcY-j>0 && srcY-j<100)&&(srcX-k>0 && srcX-k<100)) && nearestTile == null) {
+					if(map.getTile(srcY-j, srcX-k).getUnit()==null) {
+						nearestTile = map.getTile(srcY-j, srcX-k);
+					} else if (map.getTile(srcY-k, srcX-j).getUnit()==null) {
+						nearestTile = map.getTile(srcY-k, srcX-j);
+					}
+				}
+			}
+		}
+		Position nearestTilePos = new Position(nearestTile.getColumn(),nearestTile.getLine());
+		return nearestTilePos;
 	}
 	
 	public void getNextTile() {
@@ -97,9 +148,6 @@ public class EntitiesManager {
 							} if(map.getTile(j, k+1).getOwner()==currentPlayer) {
 								nearTileCount++;
 							}
-						}
-						if(nearTileCount!=0) {
-							System.out.println(nearTileCount + " voisins " + " coord : " + j + " " + k);
 						}
 						switch(nearTileCount) {
 						case 1:
@@ -133,10 +181,17 @@ public class EntitiesManager {
 					randomTile=rand.nextInt(nearTile1.size());
 					nextTile=nearTile1.get(randomTile);
 				}
-				System.out.println("tile choisi : " + nextTile.getColumn() + " " + nextTile.getLine());
 				if(nextTile!=null) city.addInfluence(currentPlayer, nextTile);
 			}
 		}
+	}
+	
+	public void produceFighter(Player player, Position posFighter) {
+		if (canConstruct == true) {
+			UnitFighter fighter = new UnitFighter(20,20,"This is a fighter.",posFighter, player, 5);
+			addUnit(fighter);
+		}
+		canConstruct = false;
 	}
 
 	public List<Player> getPlayers() {
@@ -150,9 +205,29 @@ public class EntitiesManager {
 	public List<Unit> getUnits() {
 		return units;
 	}
+	
+	public List<UnitBuilder> getBuilders() {
+		return builders;
+	}
 
-	public void addUnit(Unit unit) {
+	public List<UnitFighter> getFighters() {
+		return fighters;
+	}
+
+	public void addUnit(UnitFighter unit) {
 		units.add(unit);
+		fighters.add(unit);
+		Position unitPos = unit.getPosition();
+		Tile unitTile = map.getTile(unitPos.getY(), unitPos.getX());
+		unitTile.setUnit(unit);
+	}
+
+	public void addUnit(UnitBuilder unit) {
+		units.add(unit);
+		builders.add(unit);
+		Position unitPos = unit.getPosition();
+		Tile unitTile = map.getTile(unitPos.getY(), unitPos.getX());
+		unitTile.setUnit(unit);
 	}
 
 	public List<Building> getBuildings() {

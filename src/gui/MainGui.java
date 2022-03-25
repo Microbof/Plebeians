@@ -152,6 +152,10 @@ public class MainGui extends JFrame implements Runnable {
 					for (City city : manager.getCities()) {
 						Position pos = city.getPosition();
 						if (pos.getX() == x && pos.getY() == y) {
+							if(manager.getCurrentPlayer() == city.getPlayer()) {
+								Position posFighter = manager.getNearestTile(pos);
+								manager.produceFighter(city.getPlayer(),posFighter);
+							}
 							manager.selectCity(city);
 							entitySelected = true;
 							gameDisplay.setDescriptionLabel(manager.getSelectedCity().getName() + " | " + manager.getSelectedCity().getDescription()

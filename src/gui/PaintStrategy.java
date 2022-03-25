@@ -181,6 +181,74 @@ public class PaintStrategy {
 			}
 		}
 	}	
+	
+	public void paint(UnitBuilder unit, Camera camera, Graphics graphics) {
+		Position position = unit.getPosition();
+		int tileSize = GameConfiguration.TILE_SIZE;
+		int width = GameConfiguration.WINDOW_WIDTH;
+		int height = GameConfiguration.WINDOW_HEIGHT;
+
+		int y = position.getY();
+		int x = position.getX();
+
+		if (x * tileSize - camera.getX() + tileSize >= 0) {
+			if (x * tileSize - camera.getX() <= width) {
+				if (y * tileSize - camera.getY() <= height) {
+					if (y * tileSize - camera.getY() + tileSize >= 0) {
+						if(unit.getPlayer().getColor()==GameConfiguration.PLAYER2COLOR) {
+							graphics.setColor(new Color(255,210,210));
+						} else if (unit.getPlayer().getColor()==GameConfiguration.PLAYER1COLOR) {
+							graphics.setColor(new Color(210,210,255));
+						}
+						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+						if(unit.isSelected()) {
+							paintHealthbar(unit, graphics, camera);
+							graphics.setColor(Color.RED);
+							graphics.drawOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+							graphics.setColor(Color.BLACK);
+							graphics.setFont(graphics.getFont().deriveFont(18f));
+							int stringwidth = graphics.getFontMetrics().stringWidth("Builder");
+							graphics.drawString("Builder", x * tileSize + ((tileSize-stringwidth)/2)  - camera.getX(), y * tileSize + 80 - camera.getY());
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void paint(UnitFighter unit, Camera camera, Graphics graphics) {
+		Position position = unit.getPosition();
+		int tileSize = GameConfiguration.TILE_SIZE;
+		int width = GameConfiguration.WINDOW_WIDTH;
+		int height = GameConfiguration.WINDOW_HEIGHT;
+
+		int y = position.getY();
+		int x = position.getX();
+
+		if (x * tileSize - camera.getX() + tileSize >= 0) {
+			if (x * tileSize - camera.getX() <= width) {
+				if (y * tileSize - camera.getY() <= height) {
+					if (y * tileSize - camera.getY() + tileSize >= 0) {
+						if(unit.getPlayer().getColor()==GameConfiguration.PLAYER2COLOR) {
+							graphics.setColor(new Color(103,50,50));
+						} else if (unit.getPlayer().getColor()==GameConfiguration.PLAYER1COLOR) {
+							graphics.setColor(new Color(100,100,200));
+						}
+						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+						if(unit.isSelected()) {
+							paintHealthbar(unit, graphics, camera);
+							graphics.setColor(Color.RED);
+							graphics.drawOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize);
+							graphics.setColor(Color.BLACK);
+							graphics.setFont(graphics.getFont().deriveFont(18f));
+							int stringwidth = graphics.getFontMetrics().stringWidth("Fighter");
+							graphics.drawString("Fighter", x * tileSize + ((tileSize-stringwidth)/2)  - camera.getX(), y * tileSize + 80 - camera.getY());
+						}
+					}
+				}
+			}
+		}
+	}
 
 	public void paintHealthbar(Unit unit, Graphics graphics, Camera camera) {
 		int tileSize = GameConfiguration.TILE_SIZE;

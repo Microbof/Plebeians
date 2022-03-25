@@ -29,6 +29,8 @@ import engine.map.Map;
 import engine.map.Minimap;
 import engine.process.EntitiesManager;
 import engine.unit.Unit;
+import engine.unit.UnitBuilder;
+import engine.unit.UnitFighter;
 
 public class GameDisplay extends JPanel {
 
@@ -341,8 +343,19 @@ public class GameDisplay extends JPanel {
 		for (City city : manager.getCities()) {
 			paintStrategy.paint(city, camera, g);
 		}
-		for (Unit unit : manager.getUnits()) {
+		for (UnitBuilder unit : manager.getBuilders()) {
 			paintStrategy.paint(unit, camera, g);
+			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
+//				paintStrategy.paint(manager.getBuilders(), manager.getCities(), g);
+//				paintStrategy.paint(unit.getPath(), camera, g);
+			}
+		}
+		for (UnitFighter unit : manager.getFighters()) {
+			paintStrategy.paint(unit, camera, g);
+			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
+//				paintStrategy.paint(manager.getFighters(), manager.getCities(), g);
+//				paintStrategy.paint(unit.getPath(), camera, g);
+			}
 		}
 		miniMap.repaint();
 	}
