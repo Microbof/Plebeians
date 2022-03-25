@@ -18,7 +18,8 @@ public class GameBuilder {
 	private static Map map;
 	
 	public static Map buildMap() {
-		map = new Map(100,100);
+		//map = new Map(100,100);
+		map = new Map();
 		return map;
 	}
 	

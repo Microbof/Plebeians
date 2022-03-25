@@ -22,6 +22,25 @@ public class Map {
 			}
 		}
 	}
+
+	public Map() {
+		this.lineCount = 30;
+		this.columnCount = 30;
+		tiles = new Tile[lineCount][columnCount];
+
+		for (int lineIndex = 0 ; lineIndex < lineCount ; lineIndex++) {
+			for (int columnIndex = 0 ; columnIndex < columnCount ; columnIndex++) {
+				Tile tile = new Tile(lineIndex, columnIndex,new Sea());
+				tiles[lineIndex][columnIndex] = tile;
+			}
+		}
+		for (int lineIndex = 2 ; lineIndex < 27 ; lineIndex++) {
+			for (int columnIndex = 8 ; columnIndex < 18 ; columnIndex++) {
+				Tile tile = new Tile(lineIndex, columnIndex,new Plain());
+				tiles[lineIndex][columnIndex] = tile;
+			}
+		}
+	}
 	
 	public Tile[][] getTiles(){
 		return tiles;
