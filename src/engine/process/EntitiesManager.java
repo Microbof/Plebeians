@@ -136,7 +136,7 @@ public class EntitiesManager {
 				}
 			}
 		}
-		Position nearestTilePos = new Position(nearestTile.getColumn(),nearestTile.getLine());
+		Position nearestTilePos = new Position(nearestTile.getLine(),nearestTile.getColumn());
 		return nearestTilePos;
 	}
 	
@@ -232,7 +232,7 @@ public class EntitiesManager {
 		units.add(unit);
 		fighters.add(unit);
 		Position unitPos = unit.getPosition();
-		Tile unitTile = map.getTile(unitPos.getY(), unitPos.getX());
+		Tile unitTile = map.getTile(unitPos.getX(), unitPos.getY());
 		unitTile.setUnit(unit);
 	}
 
@@ -240,7 +240,7 @@ public class EntitiesManager {
 		units.add(unit);
 		builders.add(unit);
 		Position unitPos = unit.getPosition();
-		Tile unitTile = map.getTile(unitPos.getY(), unitPos.getX());
+		Tile unitTile = map.getTile(unitPos.getX(), unitPos.getY());
 		unitTile.setUnit(unit);
 	}
 
