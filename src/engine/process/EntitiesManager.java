@@ -41,6 +41,7 @@ public class EntitiesManager {
 	
 	private boolean canConstruct = true;
 	
+	
 	private int turn;
 
 	public EntitiesManager(Map map) {
@@ -59,6 +60,8 @@ public class EntitiesManager {
 		
 		for(Unit unit : removeListUnit) {
 			units.remove(unit);
+			builders.remove(unit);
+			fighters.remove(unit);
 		}
 		
 
@@ -80,6 +83,17 @@ public class EntitiesManager {
 		for (Unit unit : units) {
 			if(unit.getPlayer() == currentPlayer) {
 				unit.resetAp();
+			}
+		}
+		
+		for(City city : cities) {
+			if(city.getPlayer() == currentPlayer && city.getConstructWait() !=0) {
+				city.setConstructWait(city.getConstructWait()-1);
+				if(city.getConstructWait()==0) {
+					Position pos = city.getPosition();
+					Position posFighter = getNearestTile(pos);
+					produceFighter(city.getPlayer(),posFighter);
+				}
 			}
 		}
 		
@@ -123,7 +137,7 @@ public class EntitiesManager {
 				}
 			}
 		}
-		Position nearestTilePos = new Position(nearestTile.getColumn(),nearestTile.getLine());
+		Position nearestTilePos = new Position(nearestTile.getLine(),nearestTile.getColumn());
 		return nearestTilePos;
 	}
 	
@@ -219,7 +233,7 @@ public class EntitiesManager {
 		units.add(unit);
 		fighters.add(unit);
 		Position unitPos = unit.getPosition();
-		Tile unitTile = map.getTile(unitPos.getY(), unitPos.getX());
+		Tile unitTile = map.getTile(unitPos.getX(), unitPos.getY());
 		unitTile.setUnit(unit);
 	}
 
@@ -227,7 +241,7 @@ public class EntitiesManager {
 		units.add(unit);
 		builders.add(unit);
 		Position unitPos = unit.getPosition();
-		Tile unitTile = map.getTile(unitPos.getY(), unitPos.getX());
+		Tile unitTile = map.getTile(unitPos.getX(), unitPos.getY());
 		unitTile.setUnit(unit);
 	}
 

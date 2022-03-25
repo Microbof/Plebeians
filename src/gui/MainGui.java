@@ -6,12 +6,15 @@ import engine.Mouse;
 import engine.Position;
 import engine.building.City;
 import engine.map.Map;
+import engine.map.Tile;
 import engine.process.EntitiesManager;
 import engine.process.GameBuilder;
 import engine.unit.Unit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -50,6 +53,11 @@ public class MainGui extends JFrame implements Runnable {
 
 		MouseControls mouseControls = new MouseControls();
 		MouseMotion mouseMotion = new MouseMotion();
+		
+		KeyControls keyboardListener = new KeyControls();
+		JTextField textField = new JTextField();
+		textField.addKeyListener(keyboardListener);
+		this.getContentPane().add(textField);
 
 		map = GameBuilder.buildMap();
 
@@ -90,8 +98,84 @@ public class MainGui extends JFrame implements Runnable {
 		Thread gameThread = new Thread(n);
 		gameThread.start();
 	}
+	
+	private class KeyControls implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent event) 
+		{
+			char keyChar = event.getKeyChar();
+			switch (keyChar) 
+			{
+				case 'q':
+					camera.move(-15, camera.getSpeed().getVy());
+					break;
+					
+				case 'd':
+					camera.move(15, camera.getSpeed().getVy());
+					break;
+					
+				case 'z':
+					camera.move(camera.getSpeed().getVx(), -15);
+					break;
+					
+				case 's':
+					camera.move(camera.getSpeed().getVx(), 15);
+					break;
+				default:
+					break;
+			}
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) 
+		{
+
+		}
+
+		@Override
+		public void keyReleased(KeyEvent event) 
+		{
+			char keyChar = event.getKeyChar();
+			switch (keyChar) 
+			{
+				case 'q':
+					camera.move(0, camera.getSpeed().getVy());
+					break;
+					
+				case 'd':
+					camera.move(0, camera.getSpeed().getVy());
+					break;
+					
+				case 'z':
+					camera.move(camera.getSpeed().getVx(), 0);
+					break;
+					
+				case 's':
+					camera.move(camera.getSpeed().getVx(), 0);
+					break;
+					
+				default:
+					break;
+			}
+		}
+	}
 
 	private class MouseControls implements MouseListener {
+		
+		public boolean isNextTo(Position position, Position position2){
+			boolean isNextToUnit = false;
+			for (int i = -1; i <= 1; i++) {
+				for (int j = -1; j <= 1; j++) {
+					if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
+						if(position2.equals(new Position(position.getX() + i, position.getY() + j))) {
+							return true;
+						}
+					}
+				}
+			}
+			return isNextToUnit;
+		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -109,7 +193,7 @@ public class MainGui extends JFrame implements Runnable {
 							enemy = unit;
 						}
 					}
-					if (enemy != null) {
+					if (enemy != null && isNextTo(selectedUnit.getPosition(), enemy.getPosition())) {
 						selectedUnit.attack(enemy);
 					}
 				}
@@ -130,7 +214,12 @@ public class MainGui extends JFrame implements Runnable {
 
 				manager.unselectCity();
 				manager.unselectUnit();
-
+				
+				Tile tile = map.getTile(x, y);
+                System.out.println("tile : " + tile.getLine() + "," + tile.getColumn());
+                if (tile.getUnit() != null) {
+                    System.out.println("unit : " + tile.getUnit().getDescription());
+                }
 				Boolean entitySelected = false;
 
 				// System.out.println("Tile [" + x + "," + y + "]");
@@ -152,9 +241,8 @@ public class MainGui extends JFrame implements Runnable {
 					for (City city : manager.getCities()) {
 						Position pos = city.getPosition();
 						if (pos.getX() == x && pos.getY() == y) {
-							if(manager.getCurrentPlayer() == city.getPlayer()) {
-								Position posFighter = manager.getNearestTile(pos);
-								manager.produceFighter(city.getPlayer(),posFighter);
+							if(manager.getCurrentPlayer() == city.getPlayer() && city.getConstructWait() == 0) {
+								city.setConstructWait(3);
 							}
 							manager.selectCity(city);
 							entitySelected = true;
@@ -170,6 +258,11 @@ public class MainGui extends JFrame implements Runnable {
 					MouseMotion.init = false;
 					if (manager.getSelectedUnit() != null && manager.getSelectedUnit().getPath() != null && !manager.getSelectedUnit().getPath().isEmpty()) {
 						//manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
+						Unit selectedUnit = manager.getSelectedUnit();
+                        Tile tile = map.getTile(selectedUnit.getPosition().getX(), selectedUnit.getPosition().getY());
+                        tile.setUnit(null);
+                        tile = map.getTile(selectedUnit.getPath().get(selectedUnit.getPath().size() - 1).getX(), selectedUnit.getPath().get(selectedUnit.getPath().size() -     1).getY());
+                        tile.setUnit(selectedUnit);
 						manager.getSelectedUnit().setPendingAction(true);
 					}
 				}

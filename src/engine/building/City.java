@@ -13,9 +13,12 @@ public class City extends Building {
 
 	private String name;
 
+	private int constructWait;
+	
 	public City(int hp, int hpMax, String description, Position position, String name, Player player) {
 		super(hp, hpMax, description, position, player);
 		this.setName(name);
+		this.setConstructWait(0);
 	}
 
 	public String getName() {
@@ -24,6 +27,14 @@ public class City extends Building {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int getConstructWait() {
+		return constructWait;
+	}
+	
+	public void setConstructWait(int time) {
+		this.constructWait = time;
 	}
 
 	public void addInfluence(Player player, Tile zone) {
