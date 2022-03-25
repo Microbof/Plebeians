@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import configuration.GameConfiguration;
 import engine.Player;
 import engine.Position;
 import engine.building.Building;
@@ -135,8 +136,8 @@ public class EntitiesManager {
 			if(city.getPlayer() == currentPlayer) {
 				Tile nextTile=null;
 				int nearTileCount=0;
-				for(int j=1;j<99;j++) {
-					for(int k=1;k<99;k++) {
+				for(int j = 1;j< GameConfiguration.COLUMN_COUNT-1; j++) {
+					for(int k=1;k<GameConfiguration.LINE_COUNT-1;k++) {
 						nearTileCount=0;
 						if(map.getTile(j, k).getOwner()==null) {
 							if(map.getTile(j-1, k).getOwner()==currentPlayer) {
