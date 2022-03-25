@@ -6,6 +6,7 @@ import engine.Mouse;
 import engine.Position;
 import engine.building.City;
 import engine.map.Map;
+import engine.map.Tile;
 import engine.process.EntitiesManager;
 import engine.process.GameBuilder;
 import engine.unit.Unit;
@@ -213,7 +214,12 @@ public class MainGui extends JFrame implements Runnable {
 
 				manager.unselectCity();
 				manager.unselectUnit();
-
+				
+				Tile tile = map.getTile(x, y);
+                System.out.println("tile : " + tile.getLine() + "," + tile.getColumn());
+                if (tile.getUnit() != null) {
+                    System.out.println("unit : " + tile.getUnit().getDescription());
+                }
 				Boolean entitySelected = false;
 
 				// System.out.println("Tile [" + x + "," + y + "]");
@@ -252,6 +258,11 @@ public class MainGui extends JFrame implements Runnable {
 					MouseMotion.init = false;
 					if (manager.getSelectedUnit() != null && manager.getSelectedUnit().getPath() != null && !manager.getSelectedUnit().getPath().isEmpty()) {
 						//manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
+						Unit selectedUnit = manager.getSelectedUnit();
+                        Tile tile = map.getTile(selectedUnit.getPosition().getX(), selectedUnit.getPosition().getY());
+                        tile.setUnit(null);
+                        tile = map.getTile(selectedUnit.getPath().get(selectedUnit.getPath().size() - 1).getX(), selectedUnit.getPath().get(selectedUnit.getPath().size() -     1).getY());
+                        tile.setUnit(selectedUnit);
 						manager.getSelectedUnit().setPendingAction(true);
 					}
 				}
