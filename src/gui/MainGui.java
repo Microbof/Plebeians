@@ -12,6 +12,8 @@ import engine.unit.Unit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -50,6 +52,11 @@ public class MainGui extends JFrame implements Runnable {
 
 		MouseControls mouseControls = new MouseControls();
 		MouseMotion mouseMotion = new MouseMotion();
+		
+		KeyControls keyboardListener = new KeyControls();
+		JTextField textField = new JTextField();
+		textField.addKeyListener(keyboardListener);
+		this.getContentPane().add(textField);
 
 		map = GameBuilder.buildMap();
 
@@ -89,6 +96,68 @@ public class MainGui extends JFrame implements Runnable {
 		MainGui n = new MainGui();
 		Thread gameThread = new Thread(n);
 		gameThread.start();
+	}
+	
+	private class KeyControls implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent event) 
+		{
+			char keyChar = event.getKeyChar();
+			switch (keyChar) 
+			{
+				case 'q':
+					camera.move(-15, camera.getSpeed().getVy());
+					break;
+					
+				case 'd':
+					camera.move(15, camera.getSpeed().getVy());
+					break;
+					
+				case 'z':
+					camera.move(camera.getSpeed().getVx(), -15);
+					break;
+					
+				case 's':
+					camera.move(camera.getSpeed().getVx(), 15);
+					break;
+				default:
+					break;
+			}
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) 
+		{
+
+		}
+
+		@Override
+		public void keyReleased(KeyEvent event) 
+		{
+			char keyChar = event.getKeyChar();
+			switch (keyChar) 
+			{
+				case 'q':
+					camera.move(0, camera.getSpeed().getVy());
+					break;
+					
+				case 'd':
+					camera.move(0, camera.getSpeed().getVy());
+					break;
+					
+				case 'z':
+					camera.move(camera.getSpeed().getVx(), 0);
+					break;
+					
+				case 's':
+					camera.move(camera.getSpeed().getVx(), 0);
+					break;
+					
+				default:
+					break;
+			}
+		}
 	}
 
 	private class MouseControls implements MouseListener {
