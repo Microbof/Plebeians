@@ -161,6 +161,20 @@ public class MainGui extends JFrame implements Runnable {
 	}
 
 	private class MouseControls implements MouseListener {
+		
+		public boolean isNextTo(Position position, Position position2){
+			boolean isNextToUnit = false;
+			for (int i = -1; i <= 1; i++) {
+				for (int j = -1; j <= 1; j++) {
+					if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
+						if(position2.equals(new Position(position.getX() + i, position.getY() + j))) {
+							return true;
+						}
+					}
+				}
+			}
+			return isNextToUnit;
+		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -178,7 +192,7 @@ public class MainGui extends JFrame implements Runnable {
 							enemy = unit;
 						}
 					}
-					if (enemy != null) {
+					if (enemy != null && isNextTo(selectedUnit.getPosition(), enemy.getPosition())) {
 						selectedUnit.attack(enemy);
 					}
 				}
