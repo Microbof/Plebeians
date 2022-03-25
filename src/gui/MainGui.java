@@ -140,9 +140,11 @@ public class MainGui extends JFrame implements Runnable {
 					if (pos.getX() == x && pos.getY() == y) {
 						manager.selectUnit(unit);
 						entitySelected = true;
-						gameDisplay.setDescriptionLabel(manager.getSelectedUnit().getPlayer().getName()
-								+ " AP : " + manager.getSelectedUnit().getAp() + " HP : " + manager.getSelectedUnit().getHp()
-								+ " " + manager.getSelectedUnit().getDescription());
+						gameDisplay.setDescriptionLabel("<html>" + manager.getSelectedUnit().getPlayer().getName()
+								+ " | AP : " + manager.getSelectedUnit().getAp() + "/" + manager.getSelectedUnit().getMaxAp() + " | HP : " + manager.getSelectedUnit().getHp()
+								+ "/" + manager.getSelectedUnit().getHpMax() + " | Attaque : " + manager.getSelectedUnit().getAttack() + " | Défense : " 
+								+ manager.getSelectedUnit().getDefense() + "<br />"
+								+ manager.getSelectedUnit().getDescription() + "</html>");
 						break;
 					}
 				}

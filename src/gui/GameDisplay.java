@@ -48,9 +48,6 @@ public class GameDisplay extends JPanel {
 	private Camera camera;
 
 	private Mouse mouse;
-	
-	String currentPlayer;
-	
 	JLabel turnLabel;
 	JLabel descriptionLabel;
 
@@ -160,7 +157,7 @@ public class GameDisplay extends JPanel {
 		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		newPartyButton.setMargin(new Insets(10, 20, 10, 20));
 
-		/*JButton OptionButton = new JButton(new OptionGame("Paramètres"));
+		/*JButton OptionButton = new JButton(new OptionGame("Paramï¿½tres"));
 		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		newPartyButton.setMargin(new Insets(10, 20, 10, 20));*/
 
