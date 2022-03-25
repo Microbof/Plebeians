@@ -152,9 +152,8 @@ public class MainGui extends JFrame implements Runnable {
 					for (City city : manager.getCities()) {
 						Position pos = city.getPosition();
 						if (pos.getX() == x && pos.getY() == y) {
-							if(manager.getCurrentPlayer() == city.getPlayer()) {
-								Position posFighter = manager.getNearestTile(pos);
-								manager.produceFighter(city.getPlayer(),posFighter);
+							if(manager.getCurrentPlayer() == city.getPlayer() && city.getConstructWait() == 0) {
+								city.setConstructWait(3);
 							}
 							manager.selectCity(city);
 							entitySelected = true;

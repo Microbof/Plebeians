@@ -40,6 +40,7 @@ public class EntitiesManager {
 	
 	private boolean canConstruct = true;
 	
+	
 	private int turn;
 
 	public EntitiesManager(Map map) {
@@ -81,6 +82,17 @@ public class EntitiesManager {
 		for (Unit unit : units) {
 			if(unit.getPlayer() == currentPlayer) {
 				unit.resetAp();
+			}
+		}
+		
+		for(City city : cities) {
+			if(city.getPlayer() == currentPlayer && city.getConstructWait() !=0) {
+				city.setConstructWait(city.getConstructWait()-1);
+				if(city.getConstructWait()==0) {
+					Position pos = city.getPosition();
+					Position posFighter = getNearestTile(pos);
+					produceFighter(city.getPlayer(),posFighter);
+				}
 			}
 		}
 		
