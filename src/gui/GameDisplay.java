@@ -12,6 +12,7 @@ import java.awt.Insets;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -59,6 +60,7 @@ public class GameDisplay extends JPanel {
 
 	// Panels of the game
 	private JPanel titleScreenPanel;
+	private JPanel pauseMenuPanel;
 	private JPanel gamePanel;
 
 	public GameDisplay(Map map, Camera camera, Mouse mouse, EntitiesManager manager) {
@@ -76,6 +78,9 @@ public class GameDisplay extends JPanel {
 
 		gamePanel = createGamePanel();
 		gamePanel.setVisible(false);
+		
+		pauseMenuPanel = createpauseMenuPanel();
+		pauseMenuPanel.setVisible(false);
 
 		titleScreenPanel = createTitleScreenPanel();
 		titleScreenPanel.setVisible(true);
@@ -133,6 +138,54 @@ public class GameDisplay extends JPanel {
 
 		return titleScreenPanel;
 	}
+	
+	public JPanel createpauseMenuPanel() {
+		JPanel pauseMenuPanel = new JPanel(new GridLayout(2, 1));
+		JPanel pauseMenuButtonsPanel = new JPanel();
+		pauseMenuButtonsPanel.setLayout(new BoxLayout(pauseMenuButtonsPanel, BoxLayout.PAGE_AXIS));
+		pauseMenuButtonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JLabel gameTitle = new JLabel("<html><h1>Plebeians</h1></html>");
+		gameTitle.setAlignmentX(SwingConstants.CENTER);
+		gameTitle.setAlignmentY(SwingConstants.CENTER);
+
+		gameTitle.setHorizontalAlignment(JLabel.CENTER);
+		gameTitle.setVerticalAlignment(JLabel.CENTER);
+		
+		JButton ResumeButton = new JButton(new LaunchGame("Reprendre la partie"));
+		ResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		ResumeButton.setMargin(new Insets(10, 20, 10, 20));
+
+		JButton newPartyButton = new JButton(new NewGame("Nouvelle Partie"));
+		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		newPartyButton.setMargin(new Insets(10, 20, 10, 20));
+
+		/*JButton OptionButton = new JButton(new OptionGame("Paramètres"));
+		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		newPartyButton.setMargin(new Insets(10, 20, 10, 20));*/
+
+		JButton quitButton = new JButton(new ExitGameButton("Quitter le jeu"));
+		quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		quitButton.setMargin(new Insets(10, 20, 10, 20));
+
+		Dimension minSize = new Dimension(5, 10);
+		Dimension prefSize = new Dimension(5, 20);
+		Dimension maxSize = new Dimension(Short.MAX_VALUE, 20);
+
+		pauseMenuButtonsPanel.add(ResumeButton);
+		pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
+		pauseMenuButtonsPanel.add(newPartyButton);
+		pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
+		//pauseMenuButtonsPanel.add(OptionButton);
+		//pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
+		pauseMenuButtonsPanel.add(quitButton);
+		pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
+
+		pauseMenuPanel.add(gameTitle);
+		pauseMenuPanel.add(pauseMenuButtonsPanel);
+		
+		return pauseMenuPanel;
+	}
 
 	private JPanel createGamePanel() {
 		JPanel panel = new JPanel(new GridLayout(6, 3));
@@ -159,11 +212,10 @@ public class GameDisplay extends JPanel {
 		turnLabel.setBackground(Color.gray);
 		turnLabel.setForeground(Color.black);
 		
-		JButton menuButton = new JButton("Menu");
-		
+		JButton menuButton = new JButton(new LaunchPause("Menu"));
 		/*
 		 * Adding the above components to the game panel
-		 */
+		 */	
 		
 		/*
 		 * ROW 1
@@ -219,10 +271,10 @@ public class GameDisplay extends JPanel {
 //					optionPanel.setVisible(false);
 //					getMainPanel().remove(optionPanel);
 			} else if (oldState == GameConfiguration.IN_PAUSE_MENU) {
-//					pauseMenuPanel.setVisible(false);
-//					getMainPanel().remove(pauseMenuPanel);
+					pauseMenuPanel.setVisible(false);
+					getMainPanel().remove(pauseMenuPanel);
 //					manager.clean();
-//					camera.reset();
+				camera.reset();
 			}
 
 			titleScreenPanel.setVisible(true);
@@ -231,8 +283,8 @@ public class GameDisplay extends JPanel {
 
 		case GameConfiguration.IN_GAME:
 			if (oldState == GameConfiguration.IN_PAUSE_MENU) {
-//					pauseMenuPanel.setVisible(false);
-//					getMainPanel().remove(pauseMenuPanel);
+					pauseMenuPanel.setVisible(false);
+					getMainPanel().remove(pauseMenuPanel);
 			} else if (oldState == GameConfiguration.IN_MENU) {
 				titleScreenPanel.setVisible(false);
 				getMainPanel().remove(titleScreenPanel);
@@ -243,10 +295,10 @@ public class GameDisplay extends JPanel {
 
 		case GameConfiguration.IN_OPTION:
 			if (oldState == GameConfiguration.IN_PAUSE_MENU) {
-//					gamePanel.setVisible(false);
-//					pauseMenuPanel.setVisible(false);
-//					getMainPanel().remove(gamePanel);
-//					getMainPanel().remove(pauseMenuPanel);
+					gamePanel.setVisible(false);
+					pauseMenuPanel.setVisible(false);
+					getMainPanel().remove(gamePanel);
+					getMainPanel().remove(pauseMenuPanel);
 			} else if (oldState == GameConfiguration.IN_MENU) {
 				titleScreenPanel.setVisible(false);
 				getMainPanel().remove(titleScreenPanel);
@@ -260,11 +312,11 @@ public class GameDisplay extends JPanel {
 //					optionPanel.setVisible(false);
 //					getMainPanel().remove(optionPanel);
 			} else if (oldState == GameConfiguration.IN_GAME) {
-//					gamePanel.setVisible(false);
-//					getMainPanel().remove(gamePanel);
+					gamePanel.setVisible(false);
+					getMainPanel().remove(gamePanel);
 			}
-//				pauseMenuPanel.setVisible(true);
-//				getMainPanel().add(pauseMenuPanel);
+				pauseMenuPanel.setVisible(true);
+				getMainPanel().add(pauseMenuPanel);
 			break;
 
 		default:
@@ -297,7 +349,43 @@ public class GameDisplay extends JPanel {
 
 			oldState = state;
 			state = GameConfiguration.IN_GAME;
+			
+			manageState();
+		}
+	}
+	
+	private class LaunchPause extends AbstractAction {
 
+		private static final long serialVersionUID = 1L;
+
+		public LaunchPause(String name) {
+			super(name);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			oldState = state;
+			state = GameConfiguration.IN_PAUSE_MENU;
+			
+			manageState();
+		}
+	}
+	
+	private class NewGame extends AbstractAction {
+
+		private static final long serialVersionUID = 1L;
+
+		public NewGame(String name) {
+			super(name);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			oldState = state;
+			state = GameConfiguration.IN_GAME;
+			
 			manageState();
 		}
 	}
