@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.awt.GridLayout;	
 import java.awt.Insets;
 
 import javax.swing.Box;
@@ -48,6 +48,9 @@ public class GameDisplay extends JPanel {
 	private Camera camera;
 
 	private Mouse mouse;
+	
+	String currentPlayer;
+	
 	JLabel turnLabel;
 	JLabel descriptionLabel;
 
