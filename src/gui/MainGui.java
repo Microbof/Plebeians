@@ -112,7 +112,7 @@ public class MainGui extends JFrame implements Runnable {
 			clip.open(AudioSystem.getAudioInputStream(new File("./res/titlescreen.wav")));
 
 			clip.start();
-			clip.loop(5);
+			clip.loop(LOOP_CONTINUOUSLY);
 
 		} catch (Exception exc) {
 			exc.printStackTrace(System.out);
