@@ -11,6 +11,11 @@ import engine.process.EntitiesManager;
 import engine.process.GameBuilder;
 import engine.unit.Unit;
 
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,6 +23,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +35,8 @@ public class MainGui extends JFrame implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH, GameConfiguration.WINDOW_HEIGHT);
+	private final static Dimension preferredSize = new Dimension(GameConfiguration.WINDOW_WIDTH,
+			GameConfiguration.WINDOW_HEIGHT);
 
 	private GameDisplay gameDisplay;
 
@@ -53,7 +64,7 @@ public class MainGui extends JFrame implements Runnable {
 
 		MouseControls mouseControls = new MouseControls();
 		MouseMotion mouseMotion = new MouseMotion();
-		
+
 		KeyControls keyboardListener = new KeyControls();
 		JTextField textField = new JTextField();
 		textField.addKeyListener(keyboardListener);
@@ -96,79 +107,86 @@ public class MainGui extends JFrame implements Runnable {
 	public static void main(String[] args) {
 		MainGui n = new MainGui();
 		Thread gameThread = new Thread(n);
+		try {
+			Clip clip = AudioSystem.getClip();
+			clip.open(AudioSystem.getAudioInputStream(new File("./res/titlescreen.wav")));
+
+			clip.start();
+			clip.loop(5);
+
+		} catch (Exception exc) {
+			exc.printStackTrace(System.out);
+		}
+
 		gameThread.start();
+
 	}
-	
+
 	private class KeyControls implements KeyListener {
 
 		@Override
-		public void keyPressed(KeyEvent event) 
-		{
+		public void keyPressed(KeyEvent event) {
 			char keyChar = event.getKeyChar();
-			switch (keyChar) 
-			{
-				case 'q':
-					camera.move(-15, camera.getSpeed().getVy());
-					break;
-					
-				case 'd':
-					camera.move(15, camera.getSpeed().getVy());
-					break;
-					
-				case 'z':
-					camera.move(camera.getSpeed().getVx(), -15);
-					break;
-					
-				case 's':
-					camera.move(camera.getSpeed().getVx(), 15);
-					break;
-				default:
-					break;
+			switch (keyChar) {
+			case 'q':
+				camera.move(-15, camera.getSpeed().getVy());
+				break;
+
+			case 'd':
+				camera.move(15, camera.getSpeed().getVy());
+				break;
+
+			case 'z':
+				camera.move(camera.getSpeed().getVx(), -15);
+				break;
+
+			case 's':
+				camera.move(camera.getSpeed().getVx(), 15);
+				break;
+			default:
+				break;
 			}
 		}
 
 		@Override
-		public void keyTyped(KeyEvent e) 
-		{
+		public void keyTyped(KeyEvent e) {
 
 		}
 
 		@Override
-		public void keyReleased(KeyEvent event) 
-		{
+		public void keyReleased(KeyEvent event) {
 			char keyChar = event.getKeyChar();
-			switch (keyChar) 
-			{
-				case 'q':
-					camera.move(0, camera.getSpeed().getVy());
-					break;
-					
-				case 'd':
-					camera.move(0, camera.getSpeed().getVy());
-					break;
-					
-				case 'z':
-					camera.move(camera.getSpeed().getVx(), 0);
-					break;
-					
-				case 's':
-					camera.move(camera.getSpeed().getVx(), 0);
-					break;
-					
-				default:
-					break;
+			switch (keyChar) {
+			case 'q':
+				camera.move(0, camera.getSpeed().getVy());
+				break;
+
+			case 'd':
+				camera.move(0, camera.getSpeed().getVy());
+				break;
+
+			case 'z':
+				camera.move(camera.getSpeed().getVx(), 0);
+				break;
+
+			case 's':
+				camera.move(camera.getSpeed().getVx(), 0);
+				break;
+
+			default:
+				break;
 			}
 		}
 	}
 
 	private class MouseControls implements MouseListener {
-		
-		public boolean isNextTo(Position position, Position position2){
+
+		public boolean isNextTo(Position position, Position position2) {
 			boolean isNextToUnit = false;
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
 					if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
-						if(position2.equals(new Position(position.getX() + i, position.getY() + j))) {
+						if (position2.equals(new Position(position.getX() + i, position.getY() + j))) {
 							return true;
 						}
 					}
@@ -189,7 +207,8 @@ public class MainGui extends JFrame implements Runnable {
 				if (selectedUnit != null) {
 					List<Unit> units = manager.getUnits();
 					for (Unit unit : units) {
-						if(unit.getPosition().equals(pos) && unit.getPlayer() != manager.getCurrentPlayer() && selectedUnit.getAp() > 0) {
+						if (unit.getPosition().equals(pos) && unit.getPlayer() != manager.getCurrentPlayer()
+								&& selectedUnit.getAp() > 0) {
 							enemy = unit;
 						}
 					}
@@ -214,12 +233,12 @@ public class MainGui extends JFrame implements Runnable {
 
 				manager.unselectCity();
 				manager.unselectUnit();
-				
+
 				Tile tile = map.getTile(x, y);
-                System.out.println("tile : " + tile.getLine() + "," + tile.getColumn());
-                if (tile.getUnit() != null) {
-                    System.out.println("unit : " + tile.getUnit().getDescription());
-                }
+				System.out.println("tile : " + tile.getLine() + "," + tile.getColumn());
+				if (tile.getUnit() != null) {
+					System.out.println("unit : " + tile.getUnit().getDescription());
+				}
 				Boolean entitySelected = false;
 
 				// System.out.println("Tile [" + x + "," + y + "]");
@@ -230,26 +249,28 @@ public class MainGui extends JFrame implements Runnable {
 						manager.selectUnit(unit);
 						entitySelected = true;
 						gameDisplay.setDescriptionLabel("<html>" + manager.getSelectedUnit().getPlayer().getName()
-								+ " | AP : " + manager.getSelectedUnit().getAp() + "/" + manager.getSelectedUnit().getMaxAp() + " | HP : " + manager.getSelectedUnit().getHp()
-								+ "/" + manager.getSelectedUnit().getHpMax() + " | Attaque : " + manager.getSelectedUnit().getAttack() + " | Défense : " 
+								+ " | AP : " + manager.getSelectedUnit().getAp() + "/"
+								+ manager.getSelectedUnit().getMaxAp() + " | HP : " + manager.getSelectedUnit().getHp()
+								+ "/" + manager.getSelectedUnit().getHpMax() + " | Attaque : "
+								+ manager.getSelectedUnit().getAttack() + " | Défense : "
 								+ manager.getSelectedUnit().getDefense() + "<br />"
 								+ manager.getSelectedUnit().getDescription() + "</html>");
 						break;
 					}
 				}
-				
-				
+
 				if (entitySelected == false) {
 					for (City city : manager.getCities()) {
 						Position pos = city.getPosition();
 						if (pos.getX() == x && pos.getY() == y) {
-							if(manager.getCurrentPlayer() == city.getPlayer() && city.getConstructWait() == 0) {
+							if (manager.getCurrentPlayer() == city.getPlayer() && city.getConstructWait() == 0) {
 								city.setConstructWait(3);
 							}
 							manager.selectCity(city);
 							entitySelected = true;
-							gameDisplay.setDescriptionLabel(manager.getSelectedCity().getName() + " | " + manager.getSelectedCity().getDescription()
-									+ " | HP : " + manager.getSelectedCity().getHealth());
+							gameDisplay.setDescriptionLabel(manager.getSelectedCity().getName() + " | "
+									+ manager.getSelectedCity().getDescription() + " | HP : "
+									+ manager.getSelectedCity().getHealth());
 							break;
 						}
 					}
@@ -258,13 +279,15 @@ public class MainGui extends JFrame implements Runnable {
 				if (MouseMotion.isDragged) {
 					MouseMotion.isDragged = false;
 					MouseMotion.init = false;
-					if (manager.getSelectedUnit() != null && manager.getSelectedUnit().getPath() != null && !manager.getSelectedUnit().getPath().isEmpty()) {
-						//manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
+					if (manager.getSelectedUnit() != null && manager.getSelectedUnit().getPath() != null
+							&& !manager.getSelectedUnit().getPath().isEmpty()) {
+						// manager.getSelectedUnit().calculateSpeed(manager.getSelectedUnit().getPath().get(0));
 						Unit selectedUnit = manager.getSelectedUnit();
-                        Tile tile = map.getTile(selectedUnit.getPosition().getX(), selectedUnit.getPosition().getY());
-                        tile.setUnit(null);
-                        tile = map.getTile(selectedUnit.getPath().get(selectedUnit.getPath().size() - 1).getX(), selectedUnit.getPath().get(selectedUnit.getPath().size() -     1).getY());
-                        tile.setUnit(selectedUnit);
+						Tile tile = map.getTile(selectedUnit.getPosition().getX(), selectedUnit.getPosition().getY());
+						tile.setUnit(null);
+						tile = map.getTile(selectedUnit.getPath().get(selectedUnit.getPath().size() - 1).getX(),
+								selectedUnit.getPath().get(selectedUnit.getPath().size() - 1).getY());
+						tile.setUnit(selectedUnit);
 						manager.getSelectedUnit().setPendingAction(true);
 					}
 				}
@@ -300,8 +323,8 @@ public class MainGui extends JFrame implements Runnable {
 		private Position addedPath;
 		private static Boolean isDragged = false;
 		private static Boolean init = false;
-		
-		public List<Position> getPossiblePosition(Position position){
+
+		public List<Position> getPossiblePosition(Position position) {
 			List<Position> possibleStartPositions = new ArrayList<>();
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
@@ -314,7 +337,7 @@ public class MainGui extends JFrame implements Runnable {
 			}
 			return possibleStartPositions;
 		}
-		
+
 		public void moveUnit(int x, int y, EntitiesManager manager) {
 			Position position = new Position(x, y);
 			Unit unit = manager.getSelectedUnit();
@@ -354,18 +377,19 @@ public class MainGui extends JFrame implements Runnable {
 						unit.addPath(position);
 						addedPath = position;
 					}
-				} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp() && !isUnitOnTile(position)) {
+				} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp()
+						&& !isUnitOnTile(position)) {
 					// System.out.println("add path");
 					unit.addPath(position);
 					addedPath = position;
 				}
 			}
 		}
-		
+
 		public boolean isUnitOnTile(Position pos) {
 			List<Unit> units = manager.getUnits();
 			for (Unit unit : units) {
-				if(unit.getPosition().equals(pos)) {
+				if (unit.getPosition().equals(pos)) {
 					return true;
 				}
 			}
@@ -391,8 +415,10 @@ public class MainGui extends JFrame implements Runnable {
 			mouse.setX(x);
 			mouse.setY(y);
 
-			if (x < camera.getRectX() || x > camera.getRectX() + camera.getRectW() || y < camera.getRectY() || y > camera.getRectY() + camera.getRectH()) {
-				double angle = Math.atan2(y - GameConfiguration.WINDOW_HEIGHT / 2, x - GameConfiguration.WINDOW_WIDTH / 2);
+			if (x < camera.getRectX() || x > camera.getRectX() + camera.getRectW() || y < camera.getRectY()
+					|| y > camera.getRectY() + camera.getRectH()) {
+				double angle = Math.atan2(y - GameConfiguration.WINDOW_HEIGHT / 2,
+						x - GameConfiguration.WINDOW_WIDTH / 2);
 				camera.move((int) (20 * Math.cos(angle)), (int) (20 * Math.sin(angle)));
 			} else {
 				camera.move(0, 0);
