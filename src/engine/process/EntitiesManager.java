@@ -1,9 +1,11 @@
 package engine.process;
 
+import java.lang.module.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import configuration.GameConfiguration;
 import engine.Player;
 import engine.Position;
 import engine.building.Building;
@@ -103,7 +105,7 @@ public class EntitiesManager {
 		int srcY = position.getY();
 		int srcX = position.getX();
 		Tile nearestTile = null;
-		for(int i=1;i<99;i++) {
+		for(int i = 1; i< GameConfiguration.COLUMN_COUNT; i++) {
 			int j = -i;
 			for(int k=0; k<=i;k++) {
 				if(((srcY+j>0 && srcY+j<100)&&(srcX+k>0 && srcX+k<100)) && nearestTile == null) {
@@ -149,8 +151,8 @@ public class EntitiesManager {
 			if(city.getPlayer() == currentPlayer) {
 				Tile nextTile=null;
 				int nearTileCount=0;
-				for(int j=1;j<99;j++) {
-					for(int k=1;k<99;k++) {
+				for(int j = 1;j< GameConfiguration.COLUMN_COUNT-1; j++) {
+					for(int k=1;k<GameConfiguration.LINE_COUNT-1;k++) {
 						nearTileCount=0;
 						if(map.getTile(j, k).getOwner()==null) {
 							if(map.getTile(j-1, k).getOwner()==currentPlayer) {

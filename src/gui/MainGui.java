@@ -337,12 +337,32 @@ public class MainGui extends JFrame implements Runnable {
 			}
 			return possibleStartPositions;
 		}
+<<<<<<< HEAD
 
+=======
+		
+		public boolean isNextTo(Position position, Position position2){
+			boolean isNextToUnit = false;
+			for (int i = -1; i <= 1; i++) {
+				for (int j = -1; j <= 1; j++) {
+					if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
+						if(position2.equals(new Position(position.getX() + i, position.getY() + j))) {
+							return true;
+						}
+					}
+				}
+			}
+			return isNextToUnit;
+		}
+		
+		
+		
+>>>>>>> branch 'main' of https://github.com/Microbof/Plebeians.git
 		public void moveUnit(int x, int y, EntitiesManager manager) {
 			Position position = new Position(x, y);
 			Unit unit = manager.getSelectedUnit();
 			boolean biomeIsAccessible;
-			biomeIsAccessible = map.getTile(x, y).getBiome().isAccessible();
+			biomeIsAccessible = map.getTile(y, x).getBiome().isAccessible();
 			if (unit != null && unit.getPlayer().equals(manager.getCurrentPlayer()) && biomeIsAccessible) {
 				List<Position> path = unit.getPath();
 				if (path.isEmpty() && unit.getAp() > 0) {
@@ -372,13 +392,17 @@ public class MainGui extends JFrame implements Runnable {
 					unit.removeLastPath();
 				}
 				if (removedPath != null && init && path.size() < unit.getAp() && !isUnitOnTile(position)) {
-					if (!path.get(path.size() - 1).equals(position)) {
+					if (!path.get(path.size() - 1).equals(position) && isNextTo(position, path.get(path.size()-1))) {
 						// System.out.println("add path");
 						unit.addPath(position);
 						addedPath = position;
 					}
+<<<<<<< HEAD
 				} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp()
 						&& !isUnitOnTile(position)) {
+=======
+				} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp() && !isUnitOnTile(position) && isNextTo(position, path.get(path.size()-1))) {
+>>>>>>> branch 'main' of https://github.com/Microbof/Plebeians.git
 					// System.out.println("add path");
 					unit.addPath(position);
 					addedPath = position;

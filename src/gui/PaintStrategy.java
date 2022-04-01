@@ -14,7 +14,9 @@ import engine.unit.Unit;
 import engine.unit.UnitBuilder;
 import engine.unit.UnitFighter;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.image.ImageObserver;
 import java.util.List;
 
 public class PaintStrategy {
@@ -36,28 +38,28 @@ public class PaintStrategy {
 				switch (tile.getBiome().getId()) {
 				case 0: // plain
 					graphics.setColor(new Color(0, 100, 0));
-					graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
-							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+					graphics.drawImage(new ImageIcon("src/graphic/plain.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
+							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				case 1: // hill
 					graphics.setColor(new Color(0, 150, 0));
-					graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
-							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+					graphics.drawImage(new ImageIcon("src/graphic/hill.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
+							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				case 2: // forest
 					graphics.setColor(new Color(0, 50, 0));
-					graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
-							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+					graphics.drawImage(new ImageIcon("src/graphic/forest.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
+							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				case 3: // mountain
 					graphics.setColor(Color.GRAY);
-					graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
-							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+					graphics.drawImage(new ImageIcon("src/graphic/mountain.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
+							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				case 4: // sea
 					graphics.setColor(new Color(0, 0, 100));
-					graphics.fillRect(tile.getColumn() * tileSize - camera.getX(),
-							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize);
+					graphics.drawImage(new ImageIcon("src/graphic/water.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
+							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				}
 				if (tile.getColumn() * tileSize - camera.getX() + tileSize >= 0) {
@@ -298,7 +300,7 @@ public class PaintStrategy {
 					break;
 				}
 			}
-			graphics.drawRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
 		List<City> cities = manager.getCities();
 		for (City city : cities) {
@@ -311,7 +313,7 @@ public class PaintStrategy {
 					break;
 				}
 			}
-			graphics.drawRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
 		List<Building> buildings = manager.getBuildings();
 		for (Building building : buildings) {
@@ -324,7 +326,7 @@ public class PaintStrategy {
 					break;
 				}
 			}
-			graphics.drawRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
 	}
 
