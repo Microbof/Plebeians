@@ -1,5 +1,6 @@
 package engine.process;
 
+import java.lang.module.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -104,7 +105,7 @@ public class EntitiesManager {
 		int srcY = position.getY();
 		int srcX = position.getX();
 		Tile nearestTile = null;
-		for(int i=1;i<99;i++) {
+		for(int i = 1; i< GameConfiguration.COLUMN_COUNT; i++) {
 			int j = -i;
 			for(int k=0; k<=i;k++) {
 				if(((srcY+j>0 && srcY+j<100)&&(srcX+k>0 && srcX+k<100)) && nearestTile == null) {
