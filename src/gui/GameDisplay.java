@@ -197,8 +197,8 @@ public class GameDisplay extends JPanel {
 		
 		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
 		nexTurnButton.setFocusable(false);
-		miniMap = new Minimap(map, manager);
-		
+		miniMap = new Minimap(map, manager, camera);
+
 		JLabel descriptionLabel = this.descriptionLabel;
 		descriptionLabel.setOpaque(true);
 		descriptionLabel.setBackground(Color.gray);
