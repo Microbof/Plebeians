@@ -11,7 +11,6 @@ import engine.process.EntitiesManager;
 import engine.process.GameBuilder;
 import engine.unit.Unit;
 
-import javax.print.attribute.standard.Media;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
@@ -24,10 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +43,8 @@ public class MainGui extends JFrame implements Runnable {
 	private Camera camera;
 
 	private Mouse mouse;
+
+	public static Clip music;
 
 	public MainGui() {
 		super("Game");
@@ -107,19 +105,16 @@ public class MainGui extends JFrame implements Runnable {
 	public static void main(String[] args) {
 		MainGui n = new MainGui();
 		Thread gameThread = new Thread(n);
-		try {
-			Clip clip = AudioSystem.getClip();
-			clip.open(AudioSystem.getAudioInputStream(new File("./res/titlescreen.wav")));
-
-			clip.start();
-			clip.loop(LOOP_CONTINUOUSLY);
-
-		} catch (Exception exc) {
-			exc.printStackTrace(System.out);
-		}
-
 		gameThread.start();
-
+		try {
+			music = AudioSystem.getClip();
+			music.open(AudioSystem.getAudioInputStream(new File("./res/titlescreen.wav")));
+		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		music.start();
+		music.loop(50);
 	}
 
 	private class KeyControls implements KeyListener {
@@ -255,6 +250,37 @@ public class MainGui extends JFrame implements Runnable {
 								+ manager.getSelectedUnit().getAttack() + " | Défense : "
 								+ manager.getSelectedUnit().getDefense() + "<br />"
 								+ manager.getSelectedUnit().getDescription() + "</html>");
+						if (manager.getSelectedUnit().getDescription() == "Unité combattante") {
+							Clip clip;
+							try {
+								clip = AudioSystem.getClip();
+								clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/select_fighter.wav")));
+								clip.start();
+							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+						if (manager.getSelectedUnit().getDescription() == "Ouvriers") {
+							try {
+								Clip clip = AudioSystem.getClip();
+								clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/select_builder.wav")));
+								clip.start();
+							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+						if (manager.getSelectedCity().getName() == "le Bled Bleu" || manager.getSelectedCity().getName() == "le Bled Rouge") {
+							try {
+								Clip clip = AudioSystem.getClip();
+								clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/select_city.wav")));
+								clip.start();
+							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
 						break;
 					}
 				}
@@ -275,6 +301,7 @@ public class MainGui extends JFrame implements Runnable {
 						}
 					}
 				}
+
 			} else if (e.getButton() == 3) {
 				if (MouseMotion.isDragged) {
 					MouseMotion.isDragged = false;
@@ -337,16 +364,13 @@ public class MainGui extends JFrame implements Runnable {
 			}
 			return possibleStartPositions;
 		}
-<<<<<<< HEAD
 
-=======
-		
-		public boolean isNextTo(Position position, Position position2){
+		public boolean isNextTo(Position position, Position position2) {
 			boolean isNextToUnit = false;
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
 					if ((i != 0 && j != 0) || (i == 0 && j != 0) || (i != 0 && j == 0)) {
-						if(position2.equals(new Position(position.getX() + i, position.getY() + j))) {
+						if (position2.equals(new Position(position.getX() + i, position.getY() + j))) {
 							return true;
 						}
 					}
@@ -354,10 +378,7 @@ public class MainGui extends JFrame implements Runnable {
 			}
 			return isNextToUnit;
 		}
-		
-		
-		
->>>>>>> branch 'main' of https://github.com/Microbof/Plebeians.git
+
 		public void moveUnit(int x, int y, EntitiesManager manager) {
 			Position position = new Position(x, y);
 			Unit unit = manager.getSelectedUnit();
@@ -392,17 +413,13 @@ public class MainGui extends JFrame implements Runnable {
 					unit.removeLastPath();
 				}
 				if (removedPath != null && init && path.size() < unit.getAp() && !isUnitOnTile(position)) {
-					if (!path.get(path.size() - 1).equals(position) && isNextTo(position, path.get(path.size()-1))) {
+					if (!path.get(path.size() - 1).equals(position) && isNextTo(position, path.get(path.size() - 1))) {
 						// System.out.println("add path");
 						unit.addPath(position);
 						addedPath = position;
 					}
-<<<<<<< HEAD
 				} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp()
-						&& !isUnitOnTile(position)) {
-=======
-				} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp() && !isUnitOnTile(position) && isNextTo(position, path.get(path.size()-1))) {
->>>>>>> branch 'main' of https://github.com/Microbof/Plebeians.git
+						&& !isUnitOnTile(position) && isNextTo(position, path.get(path.size() - 1))) {
 					// System.out.println("add path");
 					unit.addPath(position);
 					addedPath = position;
