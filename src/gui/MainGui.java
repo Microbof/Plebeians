@@ -198,6 +198,7 @@ public class MainGui extends JFrame implements Runnable {
 			if (e.getButton() == 3) {
 				Unit selectedUnit = manager.getSelectedUnit();
 				Unit enemy = null;
+				City enemyCity = null;
 				Position pos = new Position(x, y);
 				if (selectedUnit != null) {
 					List<Unit> units = manager.getUnits();
@@ -209,6 +210,17 @@ public class MainGui extends JFrame implements Runnable {
 					}
 					if (enemy != null && isNextTo(selectedUnit.getPosition(), enemy.getPosition())) {
 						selectedUnit.attack(enemy);
+					}
+					if(enemy == null) {
+						List<City> cities = manager.getCities();
+						for (City city : cities) {
+							if(city.getPosition().equals(pos) && city.getPlayer() != manager.getCurrentPlayer() && selectedUnit.getAp() > 0) {
+								enemyCity = city;
+							}
+						}
+						if (enemyCity != null && isNextTo(selectedUnit.getPosition(), enemyCity.getPosition())) {
+							selectedUnit.attack(enemyCity);
+						}
 					}
 				}
 			}

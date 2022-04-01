@@ -37,27 +37,22 @@ public class PaintStrategy {
 				Tile tile = tiles[lineIndex][columnIndex];
 				switch (tile.getBiome().getId()) {
 				case 0: // plain
-					graphics.setColor(new Color(0, 100, 0));
 					graphics.drawImage(new ImageIcon("src/graphic/plain.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
 							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				case 1: // hill
-					graphics.setColor(new Color(0, 150, 0));
 					graphics.drawImage(new ImageIcon("src/graphic/hill.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
 							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				case 2: // forest
-					graphics.setColor(new Color(0, 50, 0));
 					graphics.drawImage(new ImageIcon("src/graphic/forest.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
 							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				case 3: // mountain
-					graphics.setColor(Color.GRAY);
 					graphics.drawImage(new ImageIcon("src/graphic/mountain.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
 							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
 				case 4: // sea
-					graphics.setColor(new Color(0, 0, 100));
 					graphics.drawImage(new ImageIcon("src/graphic/water.png").getImage(), tile.getColumn() * tileSize - camera.getX(),
 							tile.getLine() * tileSize - camera.getY(), tileSize, tileSize, null);
 					break;
@@ -273,19 +268,42 @@ public class PaintStrategy {
 		}
 	}
 
-	public void paint(Minimap minimap, Map map, EntitiesManager manager, Graphics graphics) {
+	public void paint(Minimap minimap, Map map, EntitiesManager manager, Camera camera, Graphics graphics) {
 		int width = minimap.getWidth();
 		int height = minimap.getHeight();
 		int columnCount = map.getColumnCount();
 		int lineCount = map.getLineCount();
 		float sizeX = (float) width / (float) columnCount;
 		float sizeY = (float) height / (float) lineCount;
+		Tile tiles[][] = map.getTiles();
 
-		graphics.setColor(Color.BLACK);
-		graphics.drawLine(0, 0, width - 1, 0);
-		graphics.drawLine(width - 1, 0, width - 1, height - 1);
-		graphics.drawLine(0, 0, 0, height - 1);
-		graphics.drawLine(0, height - 1, width - 1, height - 1);
+		for (int lineIndex = 0 ; lineIndex < lineCount ; lineIndex++){
+			for (int columnIndex = 0 ; columnIndex < columnCount ; columnIndex++){
+				Tile tile = tiles[lineIndex][columnIndex];
+				switch (tile.getBiome().getId()) {
+					case 0: // plain
+						graphics.drawImage(new ImageIcon("src/graphic/plain.png").getImage(), (int)(tile.getColumn() * sizeX),
+								(int)(tile.getLine() * sizeY), (int)sizeX+1, (int)sizeY+1, null);
+						break;
+					case 1: // hill
+						graphics.drawImage(new ImageIcon("src/graphic/hill.png").getImage(), (int)(tile.getColumn() * sizeX),
+								(int)(tile.getLine() * sizeY), (int)sizeX+1, (int)sizeY+1, null);
+						break;
+					case 2: // forest
+						graphics.drawImage(new ImageIcon("src/graphic/forest.png").getImage(), (int)(tile.getColumn() * sizeX),
+								(int)(tile.getLine() * sizeY), (int)sizeX+1, (int)sizeY+1, null);
+						break;
+					case 3: // mountain
+						graphics.drawImage(new ImageIcon("src/graphic/mountain.png").getImage(), (int)(tile.getColumn() * sizeX),
+								(int)(tile.getLine() * sizeY), (int)sizeX+1, (int)sizeY+1, null);
+						break;
+					case 4: // sea
+						graphics.drawImage(new ImageIcon("src/graphic/water.png").getImage(), (int)(tile.getColumn() * sizeX),
+								(int)(tile.getLine() * sizeY), (int)sizeX+1, (int)sizeY+1, null);
+						break;
+				}
+			}
+		}
 
 		List<Player> players = manager.getPlayers();
 
@@ -328,6 +346,24 @@ public class PaintStrategy {
 			}
 			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
+
+		graphics.setColor(new Color(0, 0, 0, 100));
+		int cameraX = (int)(camera.getX()/GameConfiguration.TILE_SIZE*sizeX);
+		int cameraY = (int)(camera.getY()/GameConfiguration.TILE_SIZE*sizeY);
+		int cameraW = (int)(GameConfiguration.WINDOW_WIDTH/GameConfiguration.TILE_SIZE*sizeX);
+		int cameraH = (int)(GameConfiguration.WINDOW_HEIGHT/GameConfiguration.TILE_SIZE*sizeY);
+		graphics.fillRect(0, 0, minimap.getWidth(), cameraY);
+		graphics.fillRect(0, cameraY+cameraH, minimap.getWidth(), minimap.getHeight());
+		graphics.fillRect(0, cameraY, cameraX, cameraH);
+		graphics.fillRect(cameraX+cameraW, cameraY, minimap.getWidth()-(cameraX+cameraW), cameraH);
+
+
+		int borderThickness = 3;
+		graphics.setColor(Color.BLACK);
+		graphics.fillRect(0, 0, width, borderThickness-2);
+		graphics.fillRect(width - borderThickness, 0, width, height);
+		graphics.fillRect(0, 0, borderThickness, height);
+		graphics.fillRect(0, height - borderThickness, width, height);
 	}
 
 }

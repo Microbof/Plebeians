@@ -186,26 +186,28 @@ public class GameDisplay extends JPanel {
 		pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
 		pauseMenuButtonsPanel.add(newPartyButton);
 		pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
-		// pauseMenuButtonsPanel.add(OptionButton);
-		// pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
+		//pauseMenuButtonsPanel.add(OptionButton);
+		//pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
 		pauseMenuButtonsPanel.add(quitButton);
 		pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
 
 		pauseMenuPanel.add(gameTitle);
 		pauseMenuPanel.add(pauseMenuButtonsPanel);
-
+		
 		return pauseMenuPanel;
 	}
 
 	private JPanel createGamePanel() {
 		JPanel panel = new JPanel(new GridLayout(6, 3));
-
+		
 		/*
 		 * Definition of all the component of the panel
 		 */
 
 		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
-		miniMap = new Minimap(map, manager);
+		miniMap = new Minimap(map, manager, camera);
+
+		nexTurnButton.setFocusable(false);
 
 		JLabel descriptionLabel = this.descriptionLabel;
 		descriptionLabel.setOpaque(true);
@@ -223,6 +225,7 @@ public class GameDisplay extends JPanel {
 		turnLabel.setForeground(Color.black);
 
 		JButton menuButton = new JButton(new LaunchPause("Menu"));
+		menuButton.setFocusable(false);
 		/*
 		 * Adding the above components to the game panel
 		 */
@@ -282,8 +285,8 @@ public class GameDisplay extends JPanel {
 //					optionPanel.setVisible(false);
 //					getMainPanel().remove(optionPanel);
 			} else if (oldState == GameConfiguration.IN_PAUSE_MENU) {
-				pauseMenuPanel.setVisible(false);
-				getMainPanel().remove(pauseMenuPanel);
+					pauseMenuPanel.setVisible(false);
+					getMainPanel().remove(pauseMenuPanel);
 //					manager.clean();
 				camera.reset();
 			}
@@ -295,8 +298,8 @@ public class GameDisplay extends JPanel {
 
 		case GameConfiguration.IN_GAME:
 			if (oldState == GameConfiguration.IN_PAUSE_MENU) {
-				pauseMenuPanel.setVisible(false);
-				getMainPanel().remove(pauseMenuPanel);
+					pauseMenuPanel.setVisible(false);
+					getMainPanel().remove(pauseMenuPanel);
 			} else if (oldState == GameConfiguration.IN_MENU) {
 				titleScreenPanel.setVisible(false);
 				getMainPanel().remove(titleScreenPanel);
@@ -307,10 +310,10 @@ public class GameDisplay extends JPanel {
 
 		case GameConfiguration.IN_OPTION:
 			if (oldState == GameConfiguration.IN_PAUSE_MENU) {
-				gamePanel.setVisible(false);
-				pauseMenuPanel.setVisible(false);
-				getMainPanel().remove(gamePanel);
-				getMainPanel().remove(pauseMenuPanel);
+					gamePanel.setVisible(false);
+					pauseMenuPanel.setVisible(false);
+					getMainPanel().remove(gamePanel);
+					getMainPanel().remove(pauseMenuPanel);
 			} else if (oldState == GameConfiguration.IN_MENU) {
 				titleScreenPanel.setVisible(false);
 				getMainPanel().remove(titleScreenPanel);
@@ -324,11 +327,11 @@ public class GameDisplay extends JPanel {
 //					optionPanel.setVisible(false);
 //					getMainPanel().remove(optionPanel);
 			} else if (oldState == GameConfiguration.IN_GAME) {
-				gamePanel.setVisible(false);
-				getMainPanel().remove(gamePanel);
+					gamePanel.setVisible(false);
+					getMainPanel().remove(gamePanel);
 			}
-			pauseMenuPanel.setVisible(true);
-			getMainPanel().add(pauseMenuPanel);
+				pauseMenuPanel.setVisible(true);
+				getMainPanel().add(pauseMenuPanel);
 			break;
 
 		default:
@@ -368,7 +371,7 @@ public class GameDisplay extends JPanel {
 			}
 		}
 	}
-
+	
 	private class LaunchPause extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;

@@ -1,6 +1,5 @@
 package engine.process;
 
-import java.lang.module.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,6 +32,8 @@ public class EntitiesManager {
 	private List<City> cities = new ArrayList<>();
 	
 	private List<Unit> removeListUnit = new ArrayList<>();
+	
+	private List<City> removeListCity = new ArrayList<>();
 
 	private Unit selectedUnit = null;
 
@@ -64,11 +65,19 @@ public class EntitiesManager {
 			builders.remove(unit);
 			fighters.remove(unit);
 		}
+		removeListUnit.clear();
 		
 
-		/*for (City city : cities) {
-			// update
-		}*/
+		for (City city : cities) {
+			if(city.getHp() <= 0) {
+				removeListCity.add(city);
+			}
+		}
+		
+		for(City city : removeListCity) {
+			cities.remove(city);
+		}
+		removeListCity.clear();
 	}
 	
 	public void nextTurn() {

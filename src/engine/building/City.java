@@ -12,6 +12,8 @@ public class City extends Building {
 	private List<Tile> zoneInfluence = new ArrayList<Tile>();
 
 	private String name;
+	
+	private int defense = 50;
 
 	private int constructWait;
 	
@@ -46,6 +48,14 @@ public class City extends Building {
 
 	public List<Tile> getZoneInfluence() {
 		return zoneInfluence;
+	}
+
+	public int getDefense() {
+		return defense;
+	}
+
+	public void setDefense(int defense) {
+		this.defense = defense;
 	}
 
 }
