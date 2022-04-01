@@ -18,7 +18,8 @@ public class GameBuilder {
 	private static Map map;
 	
 	public static Map buildMap() {
-		map = new Map(100,100);
+		//map = new Map(100,100);
+		map = new Map();
 		return map;
 	}
 	
@@ -34,15 +35,15 @@ public class GameBuilder {
 		player.setName("Joueur 1");
 		player.setColor(GameConfiguration.PLAYER1COLOR);
 		manager.addPlayer(player);
-		Position posCity = new Position(10,10);
-		Position posBuilder = new Position(9,10);
-		Position posFighter = new Position(11,10);
+		Position posCity = new Position(12,4);
+		Position posBuilder = new Position(posCity.getX()-1, posCity.getY());
+		Position posFighter = new Position(posCity.getX()+1,posCity.getY());
 		City city = new City(100,100,"The player's main city.",posCity,"le Bled Bleu", player);
-		city.addInfluence(player, map.getTile(10, 10));
-		city.addInfluence(player, map.getTile(9, 10));
-		city.addInfluence(player, map.getTile(11, 10));
-		city.addInfluence(player, map.getTile(10, 9));
-		city.addInfluence(player, map.getTile(10, 11));
+		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()));
+		city.addInfluence(player, map.getTile(posCity.getY()-1, posCity.getX()));
+		city.addInfluence(player, map.getTile(posCity.getY()+1, posCity.getX()));
+		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()-1));
+		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()+1));
 		manager.addCity(city);
 		UnitBuilder builder = new UnitBuilder(20,20,"This is a builder.",posBuilder, player, 5);
 		UnitFighter fighter = new UnitFighter(20,20,"This is a fighter.",posFighter, player, 5);
@@ -55,15 +56,15 @@ public class GameBuilder {
 		player.setName("Joueur 2");
 		player.setColor(GameConfiguration.PLAYER2COLOR);
 		manager.addPlayer(player);
-		Position posCity = new Position(5,5);
-		Position posBuilder = new Position(4,5);
-		Position posFighter = new Position(6,5);
+		Position posCity = new Position(10,25);
+		Position posBuilder = new Position(posCity.getX()-1, posCity.getY());
+		Position posFighter = new Position(posCity.getX()+1,posCity.getY());
 		City city = new City(100,100,"The player's main city.",posCity,"le Bled Rouge", player);
-		city.addInfluence(player, map.getTile(5, 5));
-		city.addInfluence(player, map.getTile(4, 5));
-		city.addInfluence(player, map.getTile(6, 5));
-		city.addInfluence(player, map.getTile(5, 4));
-		city.addInfluence(player, map.getTile(5, 6));
+		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()));
+		city.addInfluence(player, map.getTile(posCity.getY()-1, posCity.getX()));
+		city.addInfluence(player, map.getTile(posCity.getY()+1, posCity.getX()));
+		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()-1));
+		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()+1));
 		manager.addCity(city);
 		UnitBuilder builder = new UnitBuilder(20,20,"This is a builder.",posBuilder, player, 5);
 		UnitFighter fighter = new UnitFighter(20,20,"This is a fighter.",posFighter, player, 5);

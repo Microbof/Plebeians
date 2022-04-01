@@ -317,7 +317,7 @@ public class MainGui extends JFrame implements Runnable {
 			Position position = new Position(x, y);
 			Unit unit = manager.getSelectedUnit();
 			boolean biomeIsAccessible;
-			biomeIsAccessible = map.getTile(x, y).getBiome().isAccessible();
+			biomeIsAccessible = map.getTile(y, x).getBiome().isAccessible();
 			if (unit != null && unit.getPlayer().equals(manager.getCurrentPlayer()) && biomeIsAccessible) {
 				List<Position> path = unit.getPath();
 				if (path.isEmpty() && unit.getAp() > 0) {
