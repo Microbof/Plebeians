@@ -215,7 +215,7 @@ public class EntitiesManager {
 	
 	public void produceFighter(Player player, Position posFighter) {
 		if (canConstruct == true) {
-			UnitFighter fighter = new UnitFighter(20,20,"This is a fighter.",posFighter, player, 5);
+			UnitFighter fighter = new UnitFighter(20,20,"Unité combattante",posFighter, player, 5);
 			addUnit(fighter);
 		}
 		canConstruct = false;

@@ -38,15 +38,15 @@ public class GameBuilder {
 		Position posCity = new Position(12,4);
 		Position posBuilder = new Position(posCity.getX()-1, posCity.getY());
 		Position posFighter = new Position(posCity.getX()+1,posCity.getY());
-		City city = new City(100,100,"The player's main city.",posCity,"le Bled Bleu", player);
+		City city = new City(100,100,"Ville principale du joueur 1",posCity,"le Bled Bleu", player);
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()));
 		city.addInfluence(player, map.getTile(posCity.getY()-1, posCity.getX()));
 		city.addInfluence(player, map.getTile(posCity.getY()+1, posCity.getX()));
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()-1));
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()+1));
 		manager.addCity(city);
-		UnitBuilder builder = new UnitBuilder(20,20,"This is a builder.",posBuilder, player, 5);
-		UnitFighter fighter = new UnitFighter(20,20,"This is a fighter.",posFighter, player, 5);
+		UnitBuilder builder = new UnitBuilder(20,20,"Ouvriers",posBuilder, player, 5);
+		UnitFighter fighter = new UnitFighter(20,20,"Unité combattante",posFighter, player, 5);
 		manager.addUnit(builder);
 		manager.addUnit(fighter);
 	}
@@ -59,15 +59,15 @@ public class GameBuilder {
 		Position posCity = new Position(10,25);
 		Position posBuilder = new Position(posCity.getX()-1, posCity.getY());
 		Position posFighter = new Position(posCity.getX()+1,posCity.getY());
-		City city = new City(100,100,"The player's main city.",posCity,"le Bled Rouge", player);
+		City city = new City(100,100,"Ville principale du joueur 2",posCity,"le Bled Rouge", player);
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()));
 		city.addInfluence(player, map.getTile(posCity.getY()-1, posCity.getX()));
 		city.addInfluence(player, map.getTile(posCity.getY()+1, posCity.getX()));
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()-1));
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()+1));
 		manager.addCity(city);
-		UnitBuilder builder = new UnitBuilder(20,20,"This is a builder.",posBuilder, player, 5);
-		UnitFighter fighter = new UnitFighter(20,20,"This is a fighter.",posFighter, player, 5);
+		UnitBuilder builder = new UnitBuilder(20,20,"Ouvriers",posBuilder, player, 5);
+		UnitFighter fighter = new UnitFighter(20,20,"Unité combattante",posFighter, player, 5);
 		manager.addUnit(builder);
 		manager.addUnit(fighter);
 	}

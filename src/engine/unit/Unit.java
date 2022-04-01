@@ -64,7 +64,7 @@ public class Unit extends Entity {
 		speed.setVx(vx);
 		speed.setVy(vy);
 	}
-	
+
 	public void attack(Unit enemy) {
 		this.setHp(this.getHp() - enemy.defense);
 		enemy.setHp(enemy.getHp() - this.attack);
@@ -142,6 +142,22 @@ public class Unit extends Entity {
 
 	public int getMaxAp() {
 		return maxAp;
+	}
+
+	public int getAttack() {
+		return attack;
+	}
+
+	public void setAttack(int attack) {
+		this.attack = attack;
+	}
+
+	public int getDefense() {
+		return defense;
+	}
+
+	public void setDefense(int defense) {
+		this.defense = defense;
 	}
 
 	public boolean isPendingAction() {

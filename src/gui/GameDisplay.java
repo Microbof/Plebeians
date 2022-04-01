@@ -13,8 +13,15 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -49,9 +56,9 @@ public class GameDisplay extends JPanel {
 	private Camera camera;
 
 	private Mouse mouse;
-	
+
 	String currentPlayer;
-	
+
 	JLabel turnLabel;
 	JLabel descriptionLabel;
 
@@ -70,7 +77,7 @@ public class GameDisplay extends JPanel {
 		this.mouse = mouse;
 		this.manager = manager;
 		turnLabel = new JLabel("Tour 1 | Joueur 1");
-		descriptionLabel = new JLabel ("");
+		descriptionLabel = new JLabel("");
 
 		this.state = GameConfiguration.IN_MENU;
 		this.oldState = this.state;
@@ -79,7 +86,7 @@ public class GameDisplay extends JPanel {
 
 		gamePanel = createGamePanel();
 		gamePanel.setVisible(false);
-		
+
 		pauseMenuPanel = createPauseMenuPanel();
 		pauseMenuPanel.setVisible(false);
 
@@ -139,20 +146,20 @@ public class GameDisplay extends JPanel {
 
 		return titleScreenPanel;
 	}
-	
+
 	public JPanel createPauseMenuPanel() {
 		JPanel pauseMenuPanel = new JPanel(new GridLayout(2, 1));
 		JPanel pauseMenuButtonsPanel = new JPanel();
 		pauseMenuButtonsPanel.setLayout(new BoxLayout(pauseMenuButtonsPanel, BoxLayout.PAGE_AXIS));
 		pauseMenuButtonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		JLabel gameTitle = new JLabel("<html><h1>Plebeians</h1></html>");
 		gameTitle.setAlignmentX(SwingConstants.CENTER);
 		gameTitle.setAlignmentY(SwingConstants.CENTER);
 
 		gameTitle.setHorizontalAlignment(JLabel.CENTER);
 		gameTitle.setVerticalAlignment(JLabel.CENTER);
-		
+
 		JButton resumeButton = new JButton(new LaunchGame("Reprendre la partie"));
 		resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		resumeButton.setMargin(new Insets(10, 20, 10, 20));
@@ -161,9 +168,11 @@ public class GameDisplay extends JPanel {
 		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		newPartyButton.setMargin(new Insets(10, 20, 10, 20));
 
-		/*JButton OptionButton = new JButton(new OptionGame("Paramètres"));
-		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		newPartyButton.setMargin(new Insets(10, 20, 10, 20));*/
+		/*
+		 * JButton OptionButton = new JButton(new OptionGame("Paramètres"));
+		 * newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		 * newPartyButton.setMargin(new Insets(10, 20, 10, 20));
+		 */
 
 		JButton quitButton = new JButton(new ExitGameButton("Quitter le jeu"));
 		quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -194,67 +203,68 @@ public class GameDisplay extends JPanel {
 		/*
 		 * Definition of all the component of the panel
 		 */
-		
+
 		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
-		nexTurnButton.setFocusable(false);
 		miniMap = new Minimap(map, manager, camera);
+
+		nexTurnButton.setFocusable(false);
 
 		JLabel descriptionLabel = this.descriptionLabel;
 		descriptionLabel.setOpaque(true);
 		descriptionLabel.setBackground(Color.gray);
 		descriptionLabel.setForeground(Color.black);
-		
+
 		JLabel ressourcesLabel = new JLabel("Ressources");
 		ressourcesLabel.setOpaque(true);
 		ressourcesLabel.setBackground(Color.gray);
 		ressourcesLabel.setForeground(Color.black);
-		
+
 		JLabel turnLabel = this.turnLabel;
 		turnLabel.setOpaque(true);
 		turnLabel.setBackground(Color.gray);
 		turnLabel.setForeground(Color.black);
-		
+
 		JButton menuButton = new JButton(new LaunchPause("Menu"));
 		menuButton.setFocusable(false);
 		/*
 		 * Adding the above components to the game panel
-		 */	
-		
+		 */
+
 		/*
 		 * ROW 1
 		 */
 		panel.add(turnLabel);
 		panel.add(ressourcesLabel);
 		panel.add(menuButton);
-		
+
 		/*
 		 * ROW 2
 		 */
 		panel.add(new JLabel(""));
 		panel.add(new JLabel(""));
 		panel.add(new JLabel(""));
-		
+
 		/*
 		 * ROW 3
 		 */
 		panel.add(new JLabel(""));
 		panel.add(new JLabel(""));
 		panel.add(new JLabel(""));
-		
+
 		/*
 		 * ROW 4
 		 */
 		panel.add(new JLabel(""));
 		panel.add(new JLabel(""));
 		panel.add(new JLabel(""));
-		
+
 		/*
 		 * ROW 5
 		 */
 		panel.add(new JLabel(""));
 		panel.add(new JLabel(""));
 		panel.add(new JLabel(""));
-		
+
 		/*
 		 * ROW 6
 		 */
@@ -266,10 +276,11 @@ public class GameDisplay extends JPanel {
 
 		return panel;
 	}
-	
+
 	private void manageState() {
 		switch (state) {
 		case GameConfiguration.IN_MENU:
+
 			if (oldState == GameConfiguration.IN_OPTION) {
 //					optionPanel.setVisible(false);
 //					getMainPanel().remove(optionPanel);
@@ -282,6 +293,7 @@ public class GameDisplay extends JPanel {
 
 			titleScreenPanel.setVisible(true);
 			getMainPanel().add(titleScreenPanel);
+
 			break;
 
 		case GameConfiguration.IN_GAME:
@@ -327,7 +339,7 @@ public class GameDisplay extends JPanel {
 		}
 		getMainPanel().validate();
 	}
-	
+
 	private void nextTurnText(String playerName) {
 		turnLabel.setText(playerName);
 	}
@@ -347,8 +359,16 @@ public class GameDisplay extends JPanel {
 
 			oldState = state;
 			state = GameConfiguration.IN_GAME;
-			
+//			MainGui.music.stop();
 			manageState();
+			try {
+				Clip clip = AudioSystem.getClip();
+				clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/button.wav")));
+				clip.start();
+			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 	
@@ -365,11 +385,19 @@ public class GameDisplay extends JPanel {
 
 			oldState = state;
 			state = GameConfiguration.IN_PAUSE_MENU;
-			
+
 			manageState();
+			try {
+				Clip clip = AudioSystem.getClip();
+				clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/button.wav")));
+				clip.start();
+			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
-	
+
 	private class NewGame extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
@@ -383,11 +411,19 @@ public class GameDisplay extends JPanel {
 			map = GameBuilder.buildMap();
 			manager = new EntitiesManager(map);
 			GameBuilder.buildInitUnit(map, manager);
-			
+
 			oldState = state;
 			state = GameConfiguration.IN_GAME;
-			
+
 			manageState();
+			try {
+				Clip clip = AudioSystem.getClip();
+				clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/button.wav")));
+				clip.start();
+			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -402,7 +438,16 @@ public class GameDisplay extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
+			try {
+				Clip clip = AudioSystem.getClip();
+				clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/button.wav")));
+				clip.start();
+			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
+		
 
 	}
 
@@ -417,7 +462,15 @@ public class GameDisplay extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			manager.nextTurn();
-			nextTurnText("Tour " + manager.getTurn() +  " | " + manager.getCurrentPlayer().getName());
+			nextTurnText("Tour " + manager.getTurn() + " | " + manager.getCurrentPlayer().getName());
+			try {
+				Clip clip = AudioSystem.getClip();
+				clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/button.wav")));
+				clip.start();
+			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 	}
@@ -434,14 +487,14 @@ public class GameDisplay extends JPanel {
 		}
 		for (UnitBuilder unit : manager.getBuilders()) {
 			paintStrategy.paint(unit, camera, g);
-			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
+			if (unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
 //				paintStrategy.paint(manager.getBuilders(), manager.getCities(), g);
 //				paintStrategy.paint(unit.getPath(), camera, g);
 			}
 		}
 		for (UnitFighter unit : manager.getFighters()) {
 			paintStrategy.paint(unit, camera, g);
-			if(unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
+			if (unit.getPath() != null && unit.getPlayer().equals(manager.getCurrentPlayer())) {
 //				paintStrategy.paint(manager.getFighters(), manager.getCities(), g);
 //				paintStrategy.paint(unit.getPath(), camera, g);
 			}
