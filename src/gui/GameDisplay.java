@@ -196,6 +196,7 @@ public class GameDisplay extends JPanel {
 		 */
 		
 		JButton nexTurnButton = new JButton(new NextTurnButton("next turn"));
+		nexTurnButton.setFocusable(false);
 		miniMap = new Minimap(map, manager);
 		
 		JLabel descriptionLabel = this.descriptionLabel;
@@ -214,6 +215,7 @@ public class GameDisplay extends JPanel {
 		turnLabel.setForeground(Color.black);
 		
 		JButton menuButton = new JButton(new LaunchPause("Menu"));
+		menuButton.setFocusable(false);
 		/*
 		 * Adding the above components to the game panel
 		 */	
