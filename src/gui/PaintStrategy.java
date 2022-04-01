@@ -302,6 +302,10 @@ public class PaintStrategy {
 								(int)(tile.getLine() * sizeY), (int)sizeX+1, (int)sizeY+1, null);
 						break;
 				}
+				if (tile.getOwner() != null) {
+					graphics.setColor(tile.getOwner().getColor());
+					graphics.fillRect((int)(tile.getColumn() * sizeX), (int)(tile.getLine() * sizeY), (int)sizeX+1, (int)sizeY+1);
+				}
 			}
 		}
 
@@ -314,11 +318,15 @@ public class PaintStrategy {
 			int y = position.getY();
 			for (Player player : players) {
 				if (unit.getPlayer().equals(player)) {
-					graphics.setColor(player.getColor());
+					if (unit.getPlayer().getColor() == GameConfiguration.PLAYER2COLOR) {
+						graphics.setColor(new Color(255, 210, 210));
+					} else if (unit.getPlayer().getColor() == GameConfiguration.PLAYER1COLOR) {
+						graphics.setColor(new Color(210, 210, 255));
+					}
 					break;
 				}
 			}
-			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillOval((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
 		List<City> cities = manager.getCities();
 		for (City city : cities) {
@@ -331,7 +339,7 @@ public class PaintStrategy {
 					break;
 				}
 			}
-			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillOval((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
 		List<Building> buildings = manager.getBuildings();
 		for (Building building : buildings) {
@@ -344,7 +352,18 @@ public class PaintStrategy {
 					break;
 				}
 			}
-			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillOval((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+		}
+
+		if(manager.getSelectedUnit() != null){
+			Position position = manager.getSelectedUnit().getPosition();
+			graphics.setColor(Color.RED);
+			graphics.drawOval((int)(position.getX() * sizeX), (int)(position.getY() * sizeY), (int)sizeX+1, (int)sizeY+1);
+		}
+		else if (manager.getSelectedCity() != null){
+			Position position = manager.getSelectedCity().getPosition();
+			graphics.setColor(Color.RED);
+			graphics.drawOval((int)(position.getX() * sizeX), (int)(position.getY() * sizeY), (int)sizeX+1, (int)sizeY+1);
 		}
 
 		graphics.setColor(new Color(0, 0, 0, 100));

@@ -113,32 +113,34 @@ public class EntitiesManager {
 	public Position getNearestTile(Position position) {
 		int srcY = position.getY();
 		int srcX = position.getX();
+		int lineCount = GameConfiguration.LINE_COUNT;
+		int columnCount = GameConfiguration.COLUMN_COUNT;
 		Tile nearestTile = null;
 		for(int i = 1; i< GameConfiguration.COLUMN_COUNT; i++) {
 			int j = -i;
 			for(int k=0; k<=i;k++) {
-				if(((srcY+j>0 && srcY+j<100)&&(srcX+k>0 && srcX+k<100)) && nearestTile == null) {
+				if(((srcY+j>0 && srcY+j<columnCount)&&(srcX+k>0 && srcX+k<lineCount)) && nearestTile == null) {
 					if(map.getTile(srcY+j, srcX+k).getUnit()==null) {
 						nearestTile = map.getTile(srcY+j, srcX+k);
 					} else if (map.getTile(srcY+k, srcX+j).getUnit()==null) {
 						nearestTile = map.getTile(srcY+k, srcX+j);
 					}
 				}
-				if(((srcY-j>0 && srcY-j<100)&&(srcX+k>0 && srcX+k<100)) && nearestTile == null) {
+				if(((srcY-j>0 && srcY-j<columnCount)&&(srcX+k>0 && srcX+k<lineCount)) && nearestTile == null) {
 					if(map.getTile(srcY-j, srcX+k).getUnit()==null) {
 						nearestTile = map.getTile(srcY-j, srcX+k);
 					} else if (map.getTile(srcY+k, srcX-j).getUnit()==null) {
 						nearestTile = map.getTile(srcY+k, srcX-j);
 					}
 				}
-				if(((srcY+j>0 && srcY+j<100)&&(srcX-k>0 && srcX-k<100)) && nearestTile == null) {
+				if(((srcY+j>0 && srcY+j<columnCount)&&(srcX-k>0 && srcX-k<lineCount)) && nearestTile == null) {
 					if(map.getTile(srcY+j, srcX-k).getUnit()==null) {
 						nearestTile = map.getTile(srcY+j, srcX-k);
 					} else if (map.getTile(srcY-k, srcX+j).getUnit()==null) {
 						nearestTile = map.getTile(srcY-k, srcX+j);
 					}
 				}
-				if(((srcY-j>0 && srcY-j<100)&&(srcX-k>0 && srcX-k<100)) && nearestTile == null) {
+				if(((srcY-j>0 && srcY-j<columnCount)&&(srcX-k>0 && srcX-k<lineCount)) && nearestTile == null) {
 					if(map.getTile(srcY-j, srcX-k).getUnit()==null) {
 						nearestTile = map.getTile(srcY-j, srcX-k);
 					} else if (map.getTile(srcY-k, srcX-j).getUnit()==null) {
@@ -147,7 +149,7 @@ public class EntitiesManager {
 				}
 			}
 		}
-		Position nearestTilePos = new Position(nearestTile.getLine(),nearestTile.getColumn());
+		Position nearestTilePos = new Position(nearestTile.getColumn(),nearestTile.getLine());
 		return nearestTilePos;
 	}
 	
@@ -163,7 +165,7 @@ public class EntitiesManager {
 				for(int j = 1;j< GameConfiguration.COLUMN_COUNT-1; j++) {
 					for(int k=1;k<GameConfiguration.LINE_COUNT-1;k++) {
 						nearTileCount=0;
-						if(map.getTile(j, k).getOwner()==null) {
+						if(map.getTile(j, k).getOwner()==null && map.getTile(j, k).getBiome().isAccessible()) {
 							if(map.getTile(j-1, k).getOwner()==currentPlayer) {
 								nearTileCount++;
 							} if(map.getTile(j+1, k).getOwner()==currentPlayer) {
