@@ -300,7 +300,7 @@ public class PaintStrategy {
 					break;
 				}
 			}
-			graphics.drawRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
 		List<City> cities = manager.getCities();
 		for (City city : cities) {
@@ -313,7 +313,7 @@ public class PaintStrategy {
 					break;
 				}
 			}
-			graphics.drawRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
 		List<Building> buildings = manager.getBuildings();
 		for (Building building : buildings) {
@@ -326,7 +326,7 @@ public class PaintStrategy {
 					break;
 				}
 			}
-			graphics.drawRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
+			graphics.fillRect((int) (x * sizeX), (int) (y * sizeY), (int) sizeX, (int) sizeY);
 		}
 	}
 
