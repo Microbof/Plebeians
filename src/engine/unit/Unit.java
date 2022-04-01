@@ -7,6 +7,7 @@ import engine.Entity;
 import engine.Player;
 import engine.Position;
 import engine.Speed;
+import engine.building.City;
 import engine.map.Map;
 
 public class Unit extends Entity {
@@ -66,6 +67,13 @@ public class Unit extends Entity {
 	
 	public void attack(Unit enemy) {
 		this.setHp(this.getHp() - enemy.defense);
+		enemy.setHp(enemy.getHp() - this.attack);
+		System.out.println("attack !");
+		this.ap -= 1;
+	}
+	
+	public void attack(City enemy) {
+		this.setHp(this.getHp() - enemy.getDefense());
 		enemy.setHp(enemy.getHp() - this.attack);
 		System.out.println("attack !");
 		this.ap -= 1;
