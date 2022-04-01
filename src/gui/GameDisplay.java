@@ -29,6 +29,7 @@ import engine.building.City;
 import engine.map.Map;
 import engine.map.Minimap;
 import engine.process.EntitiesManager;
+import engine.process.GameBuilder;
 import engine.unit.Unit;
 import engine.unit.UnitBuilder;
 import engine.unit.UnitFighter;
@@ -79,7 +80,7 @@ public class GameDisplay extends JPanel {
 		gamePanel = createGamePanel();
 		gamePanel.setVisible(false);
 		
-		pauseMenuPanel = createpauseMenuPanel();
+		pauseMenuPanel = createPauseMenuPanel();
 		pauseMenuPanel.setVisible(false);
 
 		titleScreenPanel = createTitleScreenPanel();
@@ -139,7 +140,7 @@ public class GameDisplay extends JPanel {
 		return titleScreenPanel;
 	}
 	
-	public JPanel createpauseMenuPanel() {
+	public JPanel createPauseMenuPanel() {
 		JPanel pauseMenuPanel = new JPanel(new GridLayout(2, 1));
 		JPanel pauseMenuButtonsPanel = new JPanel();
 		pauseMenuButtonsPanel.setLayout(new BoxLayout(pauseMenuButtonsPanel, BoxLayout.PAGE_AXIS));
@@ -152,15 +153,15 @@ public class GameDisplay extends JPanel {
 		gameTitle.setHorizontalAlignment(JLabel.CENTER);
 		gameTitle.setVerticalAlignment(JLabel.CENTER);
 		
-		JButton ResumeButton = new JButton(new LaunchGame("Reprendre la partie"));
-		ResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		ResumeButton.setMargin(new Insets(10, 20, 10, 20));
+		JButton resumeButton = new JButton(new LaunchGame("Reprendre la partie"));
+		resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		resumeButton.setMargin(new Insets(10, 20, 10, 20));
 
 		JButton newPartyButton = new JButton(new NewGame("Nouvelle Partie"));
 		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		newPartyButton.setMargin(new Insets(10, 20, 10, 20));
 
-		/*JButton OptionButton = new JButton(new OptionGame("Paramètres"));
+		/*JButton OptionButton = new JButton(new OptionGame("ParamÃ¨tres"));
 		newPartyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		newPartyButton.setMargin(new Insets(10, 20, 10, 20));*/
 
@@ -172,7 +173,7 @@ public class GameDisplay extends JPanel {
 		Dimension prefSize = new Dimension(5, 20);
 		Dimension maxSize = new Dimension(Short.MAX_VALUE, 20);
 
-		pauseMenuButtonsPanel.add(ResumeButton);
+		pauseMenuButtonsPanel.add(resumeButton);
 		pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
 		pauseMenuButtonsPanel.add(newPartyButton);
 		pauseMenuButtonsPanel.add(new Box.Filler(minSize, prefSize, maxSize));
@@ -339,11 +340,6 @@ public class GameDisplay extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			map = GameBuilder.buildMap(selectedMap, graphicsManager, manager);
-//			
-//			GameBuilder.buildFaction(manager, boxPlayer1.getSelectedIndex() + 1, boxPlayer2.getSelectedIndex() + 1, map, maxPopulation, startingMoney);
-//			manager.setMap(map);
-
 			gamePanel = createGamePanel();
 			gamePanel.setVisible(false);
 
@@ -382,7 +378,10 @@ public class GameDisplay extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			map = GameBuilder.buildMap();
+			manager = new EntitiesManager(map);
+			GameBuilder.buildInitUnit(map, manager);
+			
 			oldState = state;
 			state = GameConfiguration.IN_GAME;
 			
