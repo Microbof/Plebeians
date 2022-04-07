@@ -24,6 +24,10 @@ public class GameConfiguration {
     public final static int IN_OPTION = 2;
      
     public final static int IN_PAUSE_MENU = 3;
+    
+    public final static int IN_VICTORYSCREEN_BLUE = 4;
+    
+    public final static int IN_VICTORYSCREEN_RED = 5;
 
 	public final static Color PLAYER1COLOR = new Color(0,0,255,80);
 	

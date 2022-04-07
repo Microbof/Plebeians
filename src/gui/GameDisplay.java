@@ -4,16 +4,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -24,13 +20,11 @@ import javax.swing.SwingConstants;
 import configuration.GameConfiguration;
 import engine.Camera;
 import engine.Mouse;
-import engine.Player;
 import engine.building.City;
 import engine.map.Map;
 import engine.map.Minimap;
 import engine.process.EntitiesManager;
 import engine.process.GameBuilder;
-import engine.unit.Unit;
 import engine.unit.UnitBuilder;
 import engine.unit.UnitFighter;
 
@@ -63,7 +57,7 @@ public class GameDisplay extends JPanel {
 	private JPanel titleScreenPanel;
 	private JPanel pauseMenuPanel;
 	private JPanel gamePanel;
-
+	
 	public GameDisplay(Map map, Camera camera, Mouse mouse, EntitiesManager manager) {
 		this.map = map;
 		this.camera = camera;
@@ -85,6 +79,7 @@ public class GameDisplay extends JPanel {
 
 		titleScreenPanel = createTitleScreenPanel();
 		titleScreenPanel.setVisible(true);
+		
 
 		getMainPanel().add(titleScreenPanel);
 
@@ -267,6 +262,7 @@ public class GameDisplay extends JPanel {
 		return panel;
 	}
 	
+	
 	private void manageState() {
 		switch (state) {
 		case GameConfiguration.IN_MENU:
@@ -321,7 +317,7 @@ public class GameDisplay extends JPanel {
 				pauseMenuPanel.setVisible(true);
 				getMainPanel().add(pauseMenuPanel);
 			break;
-
+			
 		default:
 			break;
 		}

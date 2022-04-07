@@ -3,6 +3,7 @@ package gui;
 import configuration.GameConfiguration;
 import engine.Camera;
 import engine.Mouse;
+import engine.Player;
 import engine.Position;
 import engine.building.City;
 import engine.map.Map;
@@ -13,6 +14,7 @@ import engine.unit.Unit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -64,6 +66,8 @@ public class MainGui extends JFrame implements Runnable {
 		manager = new EntitiesManager(map);
 
 		GameBuilder.buildInitUnit(map, manager);
+		manager.gameCreated = true;
+		System.out.println("game created");
 
 		gameDisplay = new GameDisplay(map, camera, mouse, manager);
 		gameDisplay.addMouseListener(mouseControls);
@@ -90,7 +94,48 @@ public class MainGui extends JFrame implements Runnable {
 			manager.update();
 			camera.update();
 			gameDisplay.repaint();
+			if(manager.blueWin) {
+				System.out.println("blue win 2");
+				gameDisplay.setVisible(false);
+				createWinPannel(manager.getPlayers().get(0));
+			}
+			if(manager.redWin) {
+				System.out.println("red win 2");
+				gameDisplay.setVisible(false);
+				createWinPannel(manager.getPlayers().get(1));
+			}
 		}
+	}
+	
+	public void createWinPannel(Player winner) {
+		JPanel panel = new JPanel(new GridLayout(2,1));
+		JLabel gameTitle = new JLabel("<html><h1>" + winner.getName() + " a gagné !</h1></html>");
+		gameTitle.setAlignmentX(SwingConstants.CENTER);
+		gameTitle.setAlignmentY(SwingConstants.CENTER);
+		gameTitle.setHorizontalAlignment(JLabel.CENTER);
+		gameTitle.setVerticalAlignment(JLabel.CENTER);
+		JButton quitButton = new JButton(new ExitGameButton("Quitter le jeu"));
+		quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		quitButton.setMargin(new Insets(10, 20, 10, 20));
+		panel.add(gameTitle);
+		panel.add(quitButton);
+		getContentPane().add(panel);
+		panel.setVisible(true);
+	}
+	
+	private class ExitGameButton extends AbstractAction {
+
+		private static final long serialVersionUID = 1L;
+
+		public ExitGameButton(String name) {
+			super(name);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+
 	}
 
 	public static void main(String[] args) {
@@ -351,7 +396,7 @@ public class MainGui extends JFrame implements Runnable {
 				if (path.isEmpty() && unit.getAp() > 0) {
 					List<Position> possibleStartPositions = getPossiblePosition(unit.getPosition());
 					for (Position p : possibleStartPositions) {
-						if (position.equals(p) && !isUnitOnTile(position)) {
+						if (position.equals(p) && !isEntityOnTile(position)) {
 							// System.out.println("init path");
 							init = true;
 							unit.addPath(position);
@@ -374,13 +419,13 @@ public class MainGui extends JFrame implements Runnable {
 					removedPath = path.get(path.size() - 1);
 					unit.removeLastPath();
 				}
-				if (removedPath != null && init && path.size() < unit.getAp() && !isUnitOnTile(position)) {
+				if (removedPath != null && init && path.size() < unit.getAp() && !isEntityOnTile(position)) {
 					if (!path.get(path.size() - 1).equals(position) && isNextTo(position, path.get(path.size()-1))) {
 						// System.out.println("add path");
 						unit.addPath(position);
 						addedPath = position;
 					}
-				} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp() && !isUnitOnTile(position) && isNextTo(position, path.get(path.size()-1))) {
+				} else if (init && !path.get(path.size() - 1).equals(position) && path.size() < unit.getAp() && !isEntityOnTile(position) && isNextTo(position, path.get(path.size()-1))) {
 					// System.out.println("add path");
 					unit.addPath(position);
 					addedPath = position;
@@ -388,10 +433,15 @@ public class MainGui extends JFrame implements Runnable {
 			}
 		}
 		
-		public boolean isUnitOnTile(Position pos) {
+		public boolean isEntityOnTile(Position pos) {
 			List<Unit> units = manager.getUnits();
 			for (Unit unit : units) {
 				if(unit.getPosition().equals(pos)) {
+					return true;
+				}
+			}
+			for(City city : manager.getCities()) {
+				if(city.getPosition().equals(pos)) {
 					return true;
 				}
 			}

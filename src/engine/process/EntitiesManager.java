@@ -43,6 +43,11 @@ public class EntitiesManager {
 	
 	private boolean canConstruct = true;
 	
+	public boolean gameCreated = false;
+	
+	public boolean blueWin = false;
+	
+	public boolean redWin = false;
 	
 	private int turn;
 
@@ -52,32 +57,53 @@ public class EntitiesManager {
 	}
 
 	public void update() {
-
-		for (Unit unit : units) {
-			if(unit.getHp() <= 0) {
-				removeListUnit.add(unit);
+		
+		if(gameCreated) {
+			for (Unit unit : units) {
+				if(unit.getHp() <= 0) {
+					removeListUnit.add(unit);
+				}
+				unit.update(map);
 			}
-			unit.update(map);
-		}
-		
-		for(Unit unit : removeListUnit) {
-			units.remove(unit);
-			builders.remove(unit);
-			fighters.remove(unit);
-		}
-		removeListUnit.clear();
-		
+			
+			for(Unit unit : removeListUnit) {
+				units.remove(unit);
+				builders.remove(unit);
+				fighters.remove(unit);
+			}
+			removeListUnit.clear();
+			
 
-		for (City city : cities) {
-			if(city.getHp() <= 0) {
-				removeListCity.add(city);
+			for (City city : cities) {
+				if(city.getHp() <= 0) {
+					removeListCity.add(city);
+				}
+			}
+			
+			for(City city : removeListCity) {
+				cities.remove(city);
+			}
+			removeListCity.clear();
+			
+			boolean hasCityBlue = false;
+			boolean hasCityRed = false;
+			for (City city : cities) {
+				if(players.indexOf(city.getPlayer()) == 0) {
+					hasCityBlue = true;
+				}
+				if(players.indexOf(city.getPlayer()) == 1) {
+					hasCityRed = true;
+				}
+			}
+			if(!hasCityRed) {
+				blueWin = true;
+				System.out.println("blue win 1");
+			}
+			if(!hasCityBlue) {
+				redWin = true;
+				System.out.println("red win 1");
 			}
 		}
-		
-		for(City city : removeListCity) {
-			cities.remove(city);
-		}
-		removeListCity.clear();
 	}
 	
 	public void nextTurn() {
