@@ -355,11 +355,19 @@ public class GameDisplay extends JPanel {
 
 			oldState = state;
 			state = GameConfiguration.IN_GAME;
-//			MainGui.music.stop();
+			MainGui.music.stop();
 			manageState();
 			try {
 				Clip clip = AudioSystem.getClip();
 				clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/button.wav")));
+				clip.start();
+			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				Clip clip = AudioSystem.getClip();
+				clip.open(AudioSystem.getAudioInputStream(new File("./res/ingame.wav")));
 				clip.start();
 			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e1) {
 				// TODO Auto-generated catch block
