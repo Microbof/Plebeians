@@ -42,8 +42,8 @@ public class GameBuilder {
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()-1));
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()+1));
 		manager.addCity(city);
-		UnitBuilder builder = new UnitBuilder(20,20,"This is a builder.",posBuilder, player, 5);
-		UnitFighter fighter = new UnitFighter(20,20,"This is a fighter.",posFighter, player, 5);
+		UnitBuilder builder = new UnitBuilder(20,20,"Ouvriers",posBuilder, player, 5);
+		UnitFighter fighter = new UnitFighter(20,20,"Unité combattante",posFighter, player, 5);
 		manager.addUnit(builder);
 		manager.addUnit(fighter);
 	}
@@ -63,8 +63,8 @@ public class GameBuilder {
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()-1));
 		city.addInfluence(player, map.getTile(posCity.getY(), posCity.getX()+1));
 		manager.addCity(city);
-		UnitBuilder builder = new UnitBuilder(20,20,"This is a builder.",posBuilder, player, 5);
-		UnitFighter fighter = new UnitFighter(20,20,"This is a fighter.",posFighter, player, 5);
+		UnitBuilder builder = new UnitBuilder(20,20,"Ouvriers",posBuilder, player, 5);
+		UnitFighter fighter = new UnitFighter(20,20,"Unité combattante",posFighter, player, 5);
 		manager.addUnit(builder);
 		manager.addUnit(fighter);
 	}
