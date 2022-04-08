@@ -328,7 +328,7 @@ public class MainGui extends JFrame implements Runnable {
 								e1.printStackTrace();
 							}
 						}
-						if (manager.getSelectedCity().getName() == "le Bled Bleu" || manager.getSelectedCity().getName() == "le Bled Rouge") {
+						if (manager.getSelectedCity() != null) {
 							try {
 								Clip clip = AudioSystem.getClip();
 								clip.open(AudioSystem.getAudioInputStream(new File("./res/fx/select_city.wav")));

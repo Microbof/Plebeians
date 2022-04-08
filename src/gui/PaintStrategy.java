@@ -14,15 +14,37 @@ import engine.unit.Unit;
 import engine.unit.UnitBuilder;
 import engine.unit.UnitFighter;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.ImageObserver;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class PaintStrategy {
+	
+	private BufferedImage builder_bleu;
+	private BufferedImage builder_rouge;
+	private BufferedImage fighter_bleu;
+	private BufferedImage fighter_rouge;
+	private BufferedImage ville_bleu;
+	private BufferedImage ville_rouge;
+	
 
 	public PaintStrategy() {
-
+		
+		try {
+			builder_bleu = ImageIO.read(new File("res/builder_bleu.png"));
+			builder_rouge = ImageIO.read(new File("res/builder_rouge.png"));
+			fighter_bleu = ImageIO.read(new File("res/fighter_bleu.png"));
+			fighter_rouge = ImageIO.read(new File("res/fighter_rouge.png"));
+			ville_bleu = ImageIO.read(new File("res/ville_bleu.png"));
+			ville_rouge = ImageIO.read(new File("res/ville_rouge.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void paint(Map map, Camera camera, Graphics graphics) {
@@ -94,9 +116,13 @@ public class PaintStrategy {
 			if (x * tileSize - camera.getX() <= width) {
 				if (y * tileSize - camera.getY() <= height) {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
-						graphics.setColor(city.getPlayer().getColor().darker());
-						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize,
-								tileSize);
+						if (city.getPlayer().getColor() == GameConfiguration.PLAYER2COLOR) {
+							graphics.drawImage(ville_rouge, x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize, null);
+						}
+						else {
+							graphics.drawImage(ville_bleu, x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize, null);
+						}
+						
 						if (city.isSelected()) {
 							graphics.setColor(Color.BLACK);
 							graphics.setFont(graphics.getFont().deriveFont(18f));
@@ -155,12 +181,10 @@ public class PaintStrategy {
 				if (y * tileSize - camera.getY() <= height) {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
 						if (unit.getPlayer().getColor() == GameConfiguration.PLAYER2COLOR) {
-							graphics.setColor(new Color(255, 210, 210));
+							graphics.drawImage(builder_rouge, x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize, null);
 						} else if (unit.getPlayer().getColor() == GameConfiguration.PLAYER1COLOR) {
-							graphics.setColor(new Color(210, 210, 255));
+							graphics.drawImage(builder_bleu, x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize, null);
 						}
-						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize,
-								tileSize);
 						if (unit.isSelected()) {
 							paintHealthbar(unit, graphics, camera);
 							graphics.setColor(Color.RED);
@@ -219,12 +243,10 @@ public class PaintStrategy {
 				if (y * tileSize - camera.getY() <= height) {
 					if (y * tileSize - camera.getY() + tileSize >= 0) {
 						if (unit.getPlayer().getColor() == GameConfiguration.PLAYER2COLOR) {
-							graphics.setColor(new Color(103, 50, 50));
+							graphics.drawImage(fighter_rouge, x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize, null);
 						} else if (unit.getPlayer().getColor() == GameConfiguration.PLAYER1COLOR) {
-							graphics.setColor(new Color(100, 100, 200));
+							graphics.drawImage(fighter_bleu, x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize, tileSize, null);
 						}
-						graphics.fillOval(x * tileSize - camera.getX(), y * tileSize - camera.getY(), tileSize,
-								tileSize);
 						if (unit.isSelected()) {
 							paintHealthbar(unit, graphics, camera);
 							graphics.setColor(Color.RED);
